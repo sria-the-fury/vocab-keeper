@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "961528979089",
+    "project_id": "vocab-keeper32",
+    "storage_bucket": "vocab-keeper32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961528979089:android:6917cb87c87d1511746930",
+        "android_client_info": {
+          "package_name": "com.sria.vocab.keeper.vocab_keeper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961528979089-fg1mr0nldab2mlhf4j71ik8ctqhvsov7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sria.vocab.keeper.vocab_keeper",
+            "certificate_hash": "4d5d42aac2ba1a969d4c53effd0c8cb922426d59"
+          }
+        },
+        {
+          "client_id": "961528979089-dad9k6qp493lr6faeqfddf6abkoo82iq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8ytyZygtBa0L9g-c941hiX-tdzoNbgiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961528979089-dad9k6qp493lr6faeqfddf6abkoo82iq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
