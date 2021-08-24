@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 
 class AddVocabModal extends StatefulWidget {
@@ -19,6 +20,26 @@ class _AddVocabModalState extends State<AddVocabModal> {
   var _addNativeMeaning = '';
   var _addSentences  = '';
 
+  List<dynamic> allVocabs = [];
+
+
+  void _getVocab() async {
+    final preference = await SharedPreferences.getInstance();
+
+    if(preference.containsKey('vocabs')){
+      var vocabs = preference.getString('vocabs');
+      setState(() {
+        allVocabs = jsonDecode(vocabs!);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getVocab();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +48,50 @@ class _AddVocabModalState extends State<AddVocabModal> {
       return (_addSentences == '' || _addWord == '' || _addEnglishMeaning == '' || _addNativeMeaning == '');
     }
 
-    print('disableSubmit()=> ${disableSubmit()}');
 
     addDataToPreference() async {
+
+      List vocab = [];
       final preference = await SharedPreferences.getInstance();
-      List vocab = [
-        {
+
+      if(preference.containsKey('vocabs') && allVocabs.length > 0){
+        setState(() {
+          vocab = allVocabs;
+        });
+        if(vocab.isNotEmpty){
+          var uuid = Uuid();
+          final currentData = {
+            "id": uuid.v4(),
+            "word" : _addWord,
+            "englishMeaning": _addEnglishMeaning,
+            "nativeMeaning": _addNativeMeaning,
+            "sentences" : _addSentences,
+            "addedAt": (new DateTime.now()).toString()
+
+          };
+          vocab.add(currentData);
+          preference.setString('vocabs', jsonEncode(vocab));
+          Navigator.of(context).pop();
+
+        }
+
+      }
+      else{
+        var uuid = Uuid();
+        final currentData = {
+          "id": uuid.v4(),
           "word" : _addWord,
           "englishMeaning": _addEnglishMeaning,
           "nativeMeaning": _addNativeMeaning,
           "sentences" : _addSentences,
           "addedAt": (new DateTime.now()).toString()
 
-        }
-      ];
-      preference.setString('vocabs', jsonEncode(vocab));
-      Navigator.of(context).pop();
+        };
+        vocab.add(currentData);
+        preference.setString('vocabs', jsonEncode(vocab));
+        Navigator.of(context).pop();
+
+      }
 
     }
 

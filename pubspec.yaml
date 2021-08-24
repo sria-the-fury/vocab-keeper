@@ -35,6 +35,9 @@ dependencies:
   google_sign_in:
   firebase_core:
   mdi: ^5.0.0-nullsafety.0
+  uuid:
+  intl:
+  zefyrka: ^1.0.10
 
 dev_dependencies:
   flutter_test:
@@ -67,17 +70,20 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
+  fonts:
+    - family: Lobster-Regular
+      fonts:
+        - asset: fonts/Lobster-Regular.ttf
+          style: normal
+
+    - family: ZillaSlab-Regular
+      fonts:
+        - asset: fonts/ZillaSlab-Regular.ttf
+          style: normal
+    - family: Ekushey-Puja
+      fonts:
+       - asset: fonts/Ekushey-Puja-Normal.ttf
+         style: normal
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

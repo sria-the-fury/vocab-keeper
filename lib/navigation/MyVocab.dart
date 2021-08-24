@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
@@ -14,15 +12,17 @@ class MyVocab extends StatefulWidget {
 }
 
 class _MyVocabState extends State<MyVocab> {
-  var allVocabs;
+  List<dynamic> allVocabs = [];
 
   void _getVocab() async {
     final preference = await SharedPreferences.getInstance();
-    var vocabs = preference.getString('vocabs');
-    setState(() {
-      allVocabs = jsonDecode(vocabs!);
-    });
 
+    if(preference.containsKey('vocabs')){
+      var vocabs = preference.getString('vocabs');
+      setState(() {
+        allVocabs = jsonDecode(vocabs!);
+      });
+    }
   }
 
   @override
@@ -36,27 +36,35 @@ class _MyVocabState extends State<MyVocab> {
   @override
   Widget build(BuildContext context) {
 
-    print('allVocabs => $allVocabs');
+
     return Scaffold(
       body: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GesturedAnimatedCard(),
-                  GesturedAnimatedCard(),
-                  GesturedAnimatedCard(),
+        child: Center(
+            child: allVocabs.isNotEmpty ?
+            new ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: allVocabs.length,
+                key: UniqueKey(),
 
+                itemBuilder: (BuildContext context, int index){
+                  return Center(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          GesturedAnimatedCard(vocabItem: allVocabs[index]),
 
+                        ],
+                      ),
+                    ),
+                  );
+                }
+            ): Text('ADD YOUR VOCABULARY')),
+      ) ,
 
-                ],
-              ),
-            ),
-          )
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           Navigator.of(context).push(new MaterialPageRoute<Null>(
