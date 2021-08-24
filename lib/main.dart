@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.white,
         dividerColor: Colors.black12,
       ),
-      title: 'SharedPreferences Demo',
+      
       home: hasCurrentUser?.uid != null ? HomePage() : LoginPage(),
     );
   }

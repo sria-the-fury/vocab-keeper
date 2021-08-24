@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:vocab_keeper/utilities/GesturedAnimatedCard.dart';
 
 class MyVocab extends StatefulWidget {
   MyVocab ({Key? key}) : super(key: key);
@@ -8,11 +11,30 @@ class MyVocab extends StatefulWidget {
 }
 
 class _MyVocabState extends State<MyVocab> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('My Vocab'),
+      body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GesturedAnimatedCard(),
+                  GesturedAnimatedCard(),
+                  GesturedAnimatedCard(),
+
+
+
+                ],
+              ),
+            ),
+          )
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){},
