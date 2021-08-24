@@ -19,6 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   _signInWithGoogle() async {
 
     showModalBottomSheet<void>(
+      shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.vertical(top: Radius.circular(20.0))),
       context: context,
       isDismissible: false,
       builder: (BuildContext context) {
