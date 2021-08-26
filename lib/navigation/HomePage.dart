@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
 import 'package:vocab_keeper/navigation/MyVocab.dart';
 import 'package:vocab_keeper/navigation/ProfilePage.dart';
+import 'package:vocab_keeper/utilities/TextToSpeech.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   final _pageOptions = [
     MyVocab(),
     ProfilePage(),
-    MyDiary(),
+    MyDiary()
   ];
 
   void _onItemTapped(int index) {

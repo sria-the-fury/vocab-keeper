@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:vocab_keeper/utilities/AddVocabModal.dart';
+import 'package:vocab_keeper/utilities/TextToSpeech.dart';
 
 
 class GesturedAnimatedCard extends StatefulWidget {
@@ -42,6 +45,15 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
 
               GestureDetector(
                 onTap: () {_flip();},
+                onLongPress: (){
+                  HapticFeedback.vibrate();
+                  Navigator.of(context).push(new MaterialPageRoute<Null>(
+                      builder: (BuildContext context) {
+                        return new AddVocabModal(isEditing: false, vocabData: vocabItems,);
+                      },
+                      fullscreenDialog: true
+                  ));
+                },
                 child: TweenAnimationBuilder(tween: Tween<double>(begin: 0, end: angle),
                     duration: Duration(seconds: 1),
                     builder: (BuildContext context, double val, __){
@@ -69,7 +81,15 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular'),),
+                                    Container(
+                                      child: Column(
+                                        children: [
+                                          Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular'),),
+                                          TextToSpeech(vocabWord: vocabItems['word'])
+                                        ],
+                                      ),
+                                    ),
+
                                     Container(
                                       child: Column(
                                         children: [
@@ -101,7 +121,15 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
+                                      Container(
+                                        child: Column(
+                                          children: [
+                                            Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
+                                            TextToSpeech(vocabWord: vocabItems['word'])
+                                          ],
+                                        ),
+                                      ),
+
                                       Container(
                                         child: Column(
                                           children: [
