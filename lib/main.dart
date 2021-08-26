@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Colors.black,
         brightness: Brightness.dark,
         backgroundColor: Colors.black,
-        accentColor: Colors.white,
+        accentColor: Colors.black,
         dividerColor: Colors.black12,
       ),
 
