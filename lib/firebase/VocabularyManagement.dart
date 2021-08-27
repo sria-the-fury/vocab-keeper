@@ -13,15 +13,12 @@ class VocabularyManagement{
         "englishMeaning": currentVocabData['englishMeaning'],
         "nativeMeaning": currentVocabData['nativeMeaning'],
         "sentences" : currentVocabData['sentences'],
-        "addedAt": currentVocabData['addedAt'],
-        "createdAt" : currentVocabData['createdAt']
+        "createdAt" : currentVocabData['createdAt'],
+        "dayMonthYear" : '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}'
 
       });
     }catch(e){
       SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
-    }
-    finally{
-      SnackBar(content: Text('vocab data added', style: TextStyle(color: Colors.white),), backgroundColor: Colors.green[500],);
     }
 
   }
@@ -38,8 +35,13 @@ class VocabularyManagement{
     }catch(e){
       SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
     }
-    finally{
-      SnackBar(content: Text('vocab data added', style: TextStyle(color: Colors.white),), backgroundColor: Colors.green[500],);
+  }
+
+  deleteVocab(vocabId) async {
+    try{
+      await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).collection('my-vocabs').doc(vocabId).delete();
+    }catch(e){
+      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
     }
   }
 

@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                         LoginPage()), (Route<dynamic> route) => false);
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Logged out', style: TextStyle(color: Colors.white),), backgroundColor: Colors.orange[500],)
+                        SnackBar(content: Text('Logged out', style: TextStyle(color: Colors.white), textAlign: TextAlign.center,), backgroundColor: Colors.orange[500],)
                     );
                   }
                 },

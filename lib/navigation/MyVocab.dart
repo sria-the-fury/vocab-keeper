@@ -1,8 +1,10 @@
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
 import 'package:vocab_keeper/utilities/GesturedAnimatedCard.dart';
 
@@ -15,34 +17,103 @@ class MyVocab extends StatefulWidget {
 
 class _MyVocabState extends State<MyVocab> {
 
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  DateTime _date = DateTime.now();
+
+  bool findAllVocab = false;
+
 
   @override
   void initState() {
     super.initState();
   }
+  void _selectDate() async {
+    final DateTime? newDate = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime.parse((currentUser!.metadata.creationTime).toString()),
+      lastDate: DateTime.now(),
+      helpText: 'Select a date',
+    );
+    if (newDate != null) {
+      setState(() {
+        findAllVocab = false;
+        _date = newDate;
+      });
+    }
+  }
+  void _searchAllVocab() {
+    setState(() {
+      findAllVocab = true;
+    });
+  }
+
 
 
 
   @override
   Widget build(BuildContext context) {
 
-    User? currentUser = FirebaseAuth.instance.currentUser;
+    print('currentUser => ${_date.year}');
+
+
 
 
     return Scaffold(
+      appBar: AppBar(
+        shadowColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        title: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton.icon(
+                onPressed: _selectDate,
+                icon: Icon(Icons.today),
+                label: Text('FIND BY DATE'),
+                style: ElevatedButton.styleFrom(
+                  enableFeedback: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0)
+                  )
+                ),
+              ),
+
+              ElevatedButton.icon(
+                onPressed: _searchAllVocab,
+                icon: Icon(Icons.description),
+                label: Text('FIND ALL'),
+                style: ElevatedButton.styleFrom(
+                    enableFeedback: true,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)
+                    )
+                ),
+              ),
+            ],
+          ),
+        )
+      ),
       body: SafeArea(
           child: Center(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
+                stream: findAllVocab ?
+                FirebaseFirestore.instance
                     .collection('users')
                     .doc(currentUser!.uid)
                     .collection('my-vocabs').orderBy('createdAt', descending: true)
+                    .snapshots() :
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(currentUser!.uid)
+                    .collection('my-vocabs')
+                    .where('dayMonthYear', isEqualTo: '${_date.day}-${_date.month}-${_date.year}').orderBy('createdAt', descending: true)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
 
                   if(snapshot.hasData){
                     var myVocabs = snapshot.data!.docs;
-                    print('myVocabs====> ${myVocabs.length}');
+
                     return myVocabs.length > 0 ? new ListView.builder(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
@@ -57,7 +128,7 @@ class _MyVocabState extends State<MyVocab> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  GesturedAnimatedCard(vocabItem: myVocabs[index]),
+                                  GesturedAnimatedCard(vocabItem: myVocabs[index], searchDate: _date, showAllVocab: findAllVocab),
 
                                 ],
                               ),
@@ -76,7 +147,8 @@ class _MyVocabState extends State<MyVocab> {
           )
       ),
 
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        icon:  Icon(Icons.add,),
         onPressed: (){
           Navigator.of(context).push(new MaterialPageRoute<Null>(
               builder: (BuildContext context) {
@@ -86,7 +158,7 @@ class _MyVocabState extends State<MyVocab> {
           ));
         },
 
-        child: Icon(Icons.add,),
+        label: Text('ADD VOCAB')
       ),
     );
   }
