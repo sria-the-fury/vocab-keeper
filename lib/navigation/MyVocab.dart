@@ -36,7 +36,7 @@ class _MyVocabState extends State<MyVocab> {
                 stream: FirebaseFirestore.instance
                     .collection('users')
                     .doc(currentUser!.uid)
-                    .collection('my-vocabs')
+                    .collection('my-vocabs').orderBy('createdAt', descending: true)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
 

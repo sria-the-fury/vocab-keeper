@@ -13,7 +13,8 @@ class VocabularyManagement{
         "englishMeaning": currentVocabData['englishMeaning'],
         "nativeMeaning": currentVocabData['nativeMeaning'],
         "sentences" : currentVocabData['sentences'],
-        "addedAt": currentVocabData['addedAt']
+        "addedAt": currentVocabData['addedAt'],
+        "createdAt" : currentVocabData['createdAt']
 
       });
     }catch(e){

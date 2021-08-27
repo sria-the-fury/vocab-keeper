@@ -102,9 +102,6 @@ class _TextToSpeechState extends State<TextToSpeech> {
 
   Future _getDefaultEngine() async {
     var engine = await flutterTts.getDefaultEngine;
-    if (engine != null) {
-      print(engine);
-    }
   }
 
   Future _speak() async {

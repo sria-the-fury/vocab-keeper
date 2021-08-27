@@ -90,7 +90,8 @@ class _AddVocabModalState extends State<AddVocabModal> {
         "englishMeaning": _addEnglishMeaning,
         "nativeMeaning": _addNativeMeaning,
         "sentences": _addSentences,
-        "addedAt": (new DateTime.now()).toString()
+        "addedAt": (new DateTime.now()).toString(),
+        "createdAt" : new DateTime.now()
       };
 
       try {
