@@ -147,7 +147,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           Container(
                                             child: Column(
                                               children: [
-                                                Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular'),),
+                                                Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.white),),
                                                 TextToSpeech(vocabWord: vocabItems['word'])
                                               ],
                                             ),
@@ -156,14 +156,16 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           Container(
                                             child: Column(
                                               children: [
-                                                Text(vocabItems['englishMeaning'], style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular'), textAlign: TextAlign.center),
+                                                Text(vocabItems['englishMeaning'],
+                                                    style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white), textAlign: TextAlign.center),
                                                 SizedBox(height: 20.0,),
-                                                Text(vocabItems['nativeMeaning'], style: TextStyle(fontSize: 25.0, fontFamily: 'Ekushey-Puja'),textAlign: TextAlign.center),
+                                                Text(vocabItems['nativeMeaning'], style: TextStyle(fontSize: 25.0, fontFamily: 'Ekushey-Puja', color: Colors.white),textAlign: TextAlign.center),
                                               ],
                                             ),
                                           ),
 
-                                          Text(DateFormat.yMMMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(vocabItems['createdAt'].seconds * 1000, )), style: TextStyle(fontSize: 15.0, fontFamily: 'ZillaSlab-Regular'),),
+                                          Text(DateFormat.yMMMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(vocabItems['createdAt'].seconds * 1000, )),
+                                            style: TextStyle(fontSize: 15.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white),),
                                         ],
                                       ),
 
