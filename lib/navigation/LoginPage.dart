@@ -89,15 +89,60 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Center(
-          child:
-          FloatingActionButton.extended(onPressed: _signInWithGoogle,
-              label: Text('Sign in with Google')
-          ),
+        body: Container(
+            child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
 
-        ),
-      ),
+                    Container(
+                      height:180,
+                      width: 180,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).accentColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              spreadRadius: 3,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            )
+                          ],
+                          image: DecorationImage(
+                              image: AssetImage('assets/ic_launcher.png',),
+                              fit: BoxFit.scaleDown,
+                            scale: 2.5
+                          )
+                      ),
+                    ),
+                    SizedBox(height: 50.0,),
+                    FloatingActionButton.extended(onPressed: _signInWithGoogle,
+                      label: Container(child: Row(
+                        children: [
+                          Text('Sign in with'),
+                          Container(
+                            height: 30,
+                            width: 30,
+                            margin: EdgeInsets.only(left: 10.0),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage('assets/google_icon.png'),
+                                )
+                            ),
+                          )
+                        ],
+                      )
+                      ),
+                    )
+                  ],
+                )
+            )
+
+        )
     );
   }
 }
