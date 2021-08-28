@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
 import 'package:vocab_keeper/navigation/MyVocab.dart';
 import 'package:vocab_keeper/navigation/ProfilePage.dart';
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book),
+            icon: Icon(Mdi.notebook),
             label: 'My Diary',
           ),
         ],
