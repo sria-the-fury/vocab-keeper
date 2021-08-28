@@ -1,10 +1,13 @@
 
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/widgets.dart' as Widgets;
 import 'package:intl/intl.dart';
+import 'package:vocab_keeper/firebase/DiaryManagement.dart';
 import 'package:vocab_keeper/utilities/ReadDiary.dart';
 
 class DiaryCard extends StatefulWidget {
@@ -17,7 +20,43 @@ class DiaryCard extends StatefulWidget {
 
 class _DiaryCardState extends State<DiaryCard> {
 
+  Widget bottomLoaderDelete(diaryId, context) {
 
+    return Container(
+      height: 80,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+      ),
+
+      child: Center(
+          child:
+          ListTile(
+              title:  TextButton.icon(
+                onPressed: () async{
+                  try{
+                    await DiaryManagement().deleteDiary(diaryId);
+                  } catch (e){
+                    final snackBar = SnackBar(content: Widgets.Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                  } finally{
+                    final snackBar = SnackBar(content: Widgets.Text('Deleted', style: TextStyle(color: Colors.white),), backgroundColor: Colors.orange[500],);
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    Navigator.of(context).pop();
+                  }
+
+
+                },
+                icon: Icon(Icons.delete, color: Colors.red),
+                label: Widgets.Text('wanna delete this? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+              ),
+              subtitle: Widgets.Text('After deleting, you can\'t get it anymore', textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey.withOpacity(0.9)),)
+          )
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     QuillController? _quillController = QuillController(document: Document.fromJson(jsonDecode(widget.diaryData['diaryTextDelta'])), selection: TextSelection.collapsed(offset: 0));
@@ -30,6 +69,19 @@ class _DiaryCardState extends State<DiaryCard> {
             fullscreenDialog: true
         ));
 
+      },
+      onLongPress: (){
+        HapticFeedback.vibrate();
+        showModalBottomSheet<void>(
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.vertical(top: Radius.circular(20.0))),
+          context: context,
+          isDismissible: true,
+          builder: (BuildContext context) {
+            return bottomLoaderDelete(widget.diaryData['id'], context);
+          },
+        );
       },
       child:Center(
           child: Container(

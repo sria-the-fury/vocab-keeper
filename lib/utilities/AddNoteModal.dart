@@ -97,7 +97,7 @@ class _AddNoteModalState extends State<AddNoteModal> {
             () {
           Navigator.of(context).pop();
         },
-        child: diaryText.length > 1 ? Icon(Icons.add) :Icon(Icons.chevron_left),
+        child: diaryText.length > 1 ? Icon(Icons.save) :Icon(Icons.chevron_left),
       ),
     );
   }

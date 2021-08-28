@@ -21,4 +21,23 @@ class DiaryManagement{
 
   }
 
+  updateDiary(diaryId, diaryNewData) async{
+    try{
+      await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).collection('my-diary').doc(diaryId).update({
+        'diaryTextDelta' : diaryNewData,
+
+      });
+    }catch(e){
+      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+    }
+  }
+
+  deleteDiary(diaryId) async{
+    try{
+      await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).collection('my-diary').doc(diaryId).delete();
+    }catch(e){
+      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+    }
+  }
+
 }

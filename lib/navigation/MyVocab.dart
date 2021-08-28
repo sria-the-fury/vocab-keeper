@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
 import 'package:vocab_keeper/utilities/GesturedAnimatedCard.dart';
 
@@ -21,6 +20,7 @@ class _MyVocabState extends State<MyVocab> {
   DateTime _date = DateTime.now();
 
   bool findAllVocab = false;
+  bool searchByDate = true;
 
 
   @override
@@ -38,12 +38,14 @@ class _MyVocabState extends State<MyVocab> {
     if (newDate != null) {
       setState(() {
         findAllVocab = false;
+        searchByDate = true;
         _date = newDate;
       });
     }
   }
   void _searchAllVocab() {
     setState(() {
+      searchByDate = false;
       findAllVocab = true;
     });
   }
@@ -53,8 +55,6 @@ class _MyVocabState extends State<MyVocab> {
 
   @override
   Widget build(BuildContext context) {
-
-    print('currentUser => ${_date.year}');
 
 
 
@@ -73,6 +73,7 @@ class _MyVocabState extends State<MyVocab> {
                 label: Text('FIND BY DATE'),
                 style: ElevatedButton.styleFrom(
                   enableFeedback: true,
+                  primary: searchByDate ? Colors.blue[500] : Colors.grey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0)
                   )
@@ -85,6 +86,7 @@ class _MyVocabState extends State<MyVocab> {
                 label: Text('FIND ALL'),
                 style: ElevatedButton.styleFrom(
                     enableFeedback: true,
+                    primary: findAllVocab ? Colors.blue[500] : Colors.grey,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0)
                     )
