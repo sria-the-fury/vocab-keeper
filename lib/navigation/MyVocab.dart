@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
 import 'package:vocab_keeper/utilities/GesturedAnimatedCard.dart';
 
@@ -70,7 +71,7 @@ class _MyVocabState extends State<MyVocab> {
               ElevatedButton.icon(
                 onPressed: _selectDate,
                 icon: Icon(Icons.today),
-                label: Text('FIND BY DATE'),
+                label: searchByDate ? Text(DateFormat.yMMMd().format(DateTime.parse(_date.toString()))) : Text('FIND BY DATE'),
                 style: ElevatedButton.styleFrom(
                   enableFeedback: true,
                   primary: searchByDate ? Colors.blue[500] : Colors.grey,
