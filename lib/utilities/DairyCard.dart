@@ -60,6 +60,8 @@ class _DiaryCardState extends State<DiaryCard> {
   @override
   Widget build(BuildContext context) {
     QuillController? _quillController = QuillController(document: Document.fromJson(jsonDecode(widget.diaryData['diaryTextDelta'])), selection: TextSelection.collapsed(offset: 0));
+
+
     return GestureDetector(
       onTap: (){
         Navigator.of(context).push(new MaterialPageRoute<Null>(
@@ -105,18 +107,7 @@ class _DiaryCardState extends State<DiaryCard> {
                       child: SingleChildScrollView(
 
                         scrollDirection: Axis.vertical,
-                        child:  QuillEditor(
-                          controller: _quillController,
-                          autoFocus: false,
-                          focusNode: FocusNode(),
-                          readOnly: true,
-                          scrollable: false,
-                          expands: false,
-                          showCursor: false,
-                          enableInteractiveSelection: false,
-                          scrollController: ScrollController(),
-                          padding: EdgeInsets.all(5),
-                        ),
+                        child: Widgets.Text(_quillController.document.toPlainText()),
                       ),
                     ),
 

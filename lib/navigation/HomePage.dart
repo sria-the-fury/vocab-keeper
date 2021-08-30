@@ -4,7 +4,6 @@ import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
 import 'package:vocab_keeper/navigation/MyVocab.dart';
 import 'package:vocab_keeper/navigation/ProfilePage.dart';
-import 'package:vocab_keeper/utilities/TextToSpeech.dart';
 
 
 class HomePage extends StatefulWidget {
