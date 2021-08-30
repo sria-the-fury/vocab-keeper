@@ -118,9 +118,11 @@ class _AddVocabModalState extends State<AddVocabModal> {
     }
     
     return Scaffold(
-        body: SafeArea(
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
             child: Container(
                 padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.only(top: 10.0),
                 child: Column(
                     children: [
                       Row(
@@ -153,7 +155,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
                         ],
                       ),
 
-                      SizedBox(height: 30.0,),
+                      SizedBox(height: 20.0,),
 
 
                       SingleChildScrollView(

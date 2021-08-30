@@ -107,17 +107,21 @@ class _MyDiaryState extends State<MyDiary> {
                 if(snapshot.hasData){
                   var diaryData = snapshot.data!.docs;
 
-                  return diaryData.length > 0 ? GridView.count(
+                  return diaryData.length > 0 ? OrientationBuilder(builder: (context, orientation)=>
+                      GridView.count(
 
-                    crossAxisCount: 2,
-                    // Generate 100 widgets that display their index in the List.
-                    children: new List.generate(
-                        snapshot.data!.docs.length, (index){
-                      var data = snapshot.data!.docs;
+                        crossAxisCount: orientation == Orientation.portrait ?  2 : 4,
+                        // Generate 100 widgets that display their index in the List.
+                        children: new List.generate(
+                            snapshot.data!.docs.length, (index){
+                          var data = snapshot.data!.docs;
 
-                      return DiaryCard(diaryData: data[index]) ;
-                    }
-                    ),
+                          return DiaryCard(diaryData: data[index]) ;
+                        }
+                        ),
+                      )
+
+
                   ) : Center(child: Text('No Diary'));
 
                 } else return Center(child: CupertinoActivityIndicator(radius: 20,));
@@ -125,20 +129,7 @@ class _MyDiaryState extends State<MyDiary> {
               }
           ),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: (){
-            Navigator.of(context).push(new MaterialPageRoute<Null>(
-                builder: (BuildContext context) {
-                  return new AddNoteModal();
-                },
-                fullscreenDialog: true
-            ));
-          },
-          label: Text('Write'),
-          icon: Icon(Icons.drive_file_rename_outline),
 
-
-        )
     );
   }
 }

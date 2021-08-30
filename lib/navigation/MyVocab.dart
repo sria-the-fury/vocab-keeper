@@ -149,20 +149,6 @@ class _MyVocabState extends State<MyVocab> {
 
           )
       ),
-
-      floatingActionButton: FloatingActionButton.extended(
-        icon:  Icon(Icons.add,),
-        onPressed: (){
-          Navigator.of(context).push(new MaterialPageRoute<Null>(
-              builder: (BuildContext context) {
-                return new AddVocabModal(isEditing: true, vocabData: null,);
-              },
-              fullscreenDialog: true
-          ));
-        },
-
-        label: Text('ADD VOCAB')
-      ),
     );
   }
 }

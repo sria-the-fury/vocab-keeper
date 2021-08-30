@@ -44,31 +44,63 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('PROFILE'),
-              IconButton(
-                enableFeedback: true,
-                icon: Icon(Icons.logout,),
-                onPressed: () async {
-                  try{
-                    await FirebaseAuth.instance.signOut();
-                  } catch(e){
-                   FlutterToaster.errorToaster(true, 'Sign out - ${e.toString()}');
-                  } finally{
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                        LoginPage()), (Route<dynamic> route) => false);
-                    FlutterToaster.warningToaster(true, 'Logged out');
-                  }
-                },
-              )
-            ],
-          ),
-        ),
+        title: Text('PROFILE'),
+        actions: <Widget> [
+          PopupMenuButton(itemBuilder: (BuildContext context){
+            return[
+              PopupMenuItem(
+                  child:
+                  TextButton(
+                    onPressed: () async {
+
+                      try{
+                        await FirebaseAuth.instance.signOut();
+                      } catch(e){
+                        FlutterToaster.errorToaster(true, 'Sign out - ${e.toString()}');
+                      } finally{
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            LoginPage()), (Route<dynamic> route) => false);
+                        FlutterToaster.warningToaster(true, 'Logged out');
+                      }
+                    },
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(Icons.logout,),
+                          Text('LOG OUT')
+                        ],
+                      ),
+                    ),
+                  )
+              ),
+
+              PopupMenuItem(
+                  child:
+                  TextButton(
+                    onPressed: () {
+                      FlutterToaster.warningToaster(true, 'Your Account will be deleted');
+                    },
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(Icons.person, color: Colors.red[500]),
+                          Text('DELETE', style: TextStyle(color: Colors.red[500]),)
+                        ],
+                      ),
+                    ),
+                  )
+              ),
+
+            ];
+
+          }),
+
+        ],
       ),
-      body: SafeArea(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Container(
           padding: EdgeInsets.all(10.0),
           child: Column(
@@ -121,16 +153,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      offset: Offset(0, 3),
-                    )
-                  ]
+                    color: Colors.white.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 3),
+                      )
+                    ]
 
                 ),
                 padding: EdgeInsets.all(10.0),
