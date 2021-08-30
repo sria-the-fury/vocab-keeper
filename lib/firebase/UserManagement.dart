@@ -16,4 +16,11 @@ class UserManagement{
     }
 
   }
+  static deleteCurrentUser(uid) async {
+    try{
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+    } catch(e){
+      FlutterToaster.errorToaster(true, 'deleteCurrentUser - ${e.toString()}');
+    }
+  }
 }

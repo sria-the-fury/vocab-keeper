@@ -51,6 +51,12 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Theme.of(context).primaryColor,
             child: _selectedIndex == 0 ? Lottie.asset('assets/lottie/add-vocab.json') : Lottie.asset('assets/lottie/write-note.json'),
             onPressed: (){
+
+              // showDialog(context: context, builder: (BuildContext context) =>
+              //     AddVocabModal(isEditing: true, vocabData: null)
+              //
+              //
+              // );
               Navigator.of(context).push(new MaterialPageRoute<Null>(
                   builder: (BuildContext context) {
                     return _selectedIndex == 0 ? new AddVocabModal(isEditing: true, vocabData: null,) :  new AddNoteModal();

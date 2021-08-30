@@ -99,6 +99,7 @@ class _AddNoteModalState extends State<AddNoteModal> {
         },
         child: diaryText.length > 1 ? Icon(Icons.save) :Icon(Icons.chevron_left),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

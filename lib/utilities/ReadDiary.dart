@@ -182,7 +182,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                     scrollDirection: Widgets.Axis.vertical,
                     child: QuillEditor(
                       controller: _quillController!,
-                      autoFocus: isEditable,
+                      autoFocus: true,
                       focusNode: FocusNode(),
                       readOnly: !isEditable,
                       scrollable: false,

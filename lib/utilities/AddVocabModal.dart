@@ -116,119 +116,105 @@ class _AddVocabModalState extends State<AddVocabModal> {
       }
 
     }
-    
-    return Scaffold(
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-            child: Container(
-                padding: EdgeInsets.all(10.0),
-                margin: EdgeInsets.only(top: 10.0),
-                child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove_circle),
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          isEditing ? Visibility(
-                              visible: !disableSubmit(),
-                              child: FloatingActionButton.extended(
-                                  onPressed: () async {
-                                    await addDataToPreference();
-                                  },
-                                  label:  Text('Add Vocab')
-                              )
-                          ) : Visibility(
-                              visible: !disableIfSame(),
-                              child: FloatingActionButton.extended(
-                                  onPressed: () async {
-                                    await updateVocabulary();
-                                  },
-                                  label:  Text('Update vocab')
-                              )
-                          )
 
-                        ],
-                      ),
-
-                      SizedBox(height: 20.0,),
-
-
-                      SingleChildScrollView(
-                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            children: [
-                              ListTile(
-                                title:  TextFormField(
-                                  initialValue: isEditing? '' : _initialWord,
-                                  onChanged: (value) => setState(() => _addWord = value),
-                                  decoration: InputDecoration(
-                                    labelText: 'Add Word',
-                                    // errorText: 'Error message',
-                                    border: OutlineInputBorder(),
-
-                                    prefixIcon: Icon(Icons.spellcheck),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15.0,),
-                              ListTile(
-                                title:  TextFormField(
-                                    initialValue: isEditing? '' : _initialEnglishMeaning,
-                                    onChanged: (value) => setState(() => _addEnglishMeaning = value),
-                                    decoration: InputDecoration(
-                                        labelText: 'Meaning of the word in English',
-                                        // errorText: 'Error message',
-                                        border: OutlineInputBorder(),
-
-                                        prefixIcon: Icon(Icons.translate)
-                                    )
-                                ),
-                              ),
-                              SizedBox(height: 15.0,),
-                              ListTile(
-                                title:  TextFormField(
-                                  initialValue: isEditing? '' : _initialNativeMeaning,
-                                  onChanged: (value) => setState(() => _addNativeMeaning = value),
-                                  decoration: InputDecoration(
-                                    labelText: 'Meaning of the word in Native Language',
-                                    // errorText: 'Error message',
-                                    border: OutlineInputBorder(),
-
-                                    prefixIcon: Icon(Icons.g_translate),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15.0,),
-                              ListTile(
-                                title:  TextFormField(
-                                  initialValue: isEditing? '' : _initialSentences,
-                                  onChanged: (value) => setState(() => _addSentences = value),
-                                  keyboardType: TextInputType.multiline,
-                                  minLines: 1,//Normal textInputField will be displayed
-                                  maxLines: 4,
-                                  decoration: InputDecoration(
-                                    labelText: 'Add Example Sentences',
-                                    // errorText: 'Error message',
-                                    border: OutlineInputBorder(),
-
-                                    prefixIcon: Icon(Icons.notes),
-                                  ),
-                                ),
-                              )
-
-                            ],
-                          )
-                      ),
-                    ]
+    return SimpleDialog(
+      contentPadding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+        titlePadding: EdgeInsets.only(top: 5.0, right: 5.0),
+        clipBehavior: Clip.antiAlias,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove_circle),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            ),
+            isEditing ? Visibility(
+                visible: !disableSubmit(),
+                child: FloatingActionButton.extended(
+                    onPressed: () async {
+                      await addDataToPreference();
+                    },
+                    label:  Text('ADD')
+                )
+            ) : Visibility(
+                visible: !disableIfSame(),
+                child: FloatingActionButton.extended(
+                    onPressed: () async {
+                      await updateVocabulary();
+                    },
+                    label:  Text('UPDATE')
                 )
             )
-        )
+
+          ],
+        ),
+        children: [
+          Column(
+                children: [
+                  ListTile(
+                    title:  TextFormField(
+                      initialValue: isEditing? '' : _initialWord,
+                      onChanged: (value) => setState(() => _addWord = value),
+                      decoration: InputDecoration(
+                        labelText: 'Add Word',
+                        // errorText: 'Error message',
+                        border: OutlineInputBorder(),
+
+                        prefixIcon: Icon(Icons.spellcheck),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15.0,),
+                  ListTile(
+                    title:  TextFormField(
+                        initialValue: isEditing? '' : _initialEnglishMeaning,
+                        onChanged: (value) => setState(() => _addEnglishMeaning = value),
+                        decoration: InputDecoration(
+                            labelText: 'Meaning of the word in English',
+                            // errorText: 'Error message',
+                            border: OutlineInputBorder(),
+
+                            prefixIcon: Icon(Icons.translate)
+                        )
+                    ),
+                  ),
+                  SizedBox(height: 15.0,),
+                  ListTile(
+                    title:  TextFormField(
+                      initialValue: isEditing? '' : _initialNativeMeaning,
+                      onChanged: (value) => setState(() => _addNativeMeaning = value),
+                      decoration: InputDecoration(
+                        labelText: 'Meaning of the word in Native Language',
+                        // errorText: 'Error message',
+                        border: OutlineInputBorder(),
+
+                        prefixIcon: Icon(Icons.g_translate),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15.0,),
+                  ListTile(
+                    title:  TextFormField(
+                      initialValue: isEditing? '' : _initialSentences,
+                      onChanged: (value) => setState(() => _addSentences = value),
+                      keyboardType: TextInputType.multiline,
+                      minLines: 1,//Normal textInputField will be displayed
+                      maxLines: 4,
+                      decoration: InputDecoration(
+                        labelText: 'Add Example Sentences',
+                        // errorText: 'Error message',
+                        border: OutlineInputBorder(),
+
+                        prefixIcon: Icon(Icons.notes),
+                      ),
+                    ),
+                  )
+
+                ],
+              ),
+        ]
     );
   }
 }

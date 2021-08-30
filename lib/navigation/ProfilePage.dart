@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:vocab_keeper/firebase/UserManagement.dart';
 import 'package:vocab_keeper/navigation/LoginPage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,6 +41,43 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
 
+  Widget bottomLoaderDelete(context) {
+
+    return Container(
+      height: 80,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+      ),
+
+      child: Center(
+          child:
+          ListTile(
+              title:  TextButton.icon(
+                onPressed: () async{
+
+                  try{
+                    await UserManagement.deleteCurrentUser(currentUser!.uid);
+                    await FirebaseAuth.instance.currentUser!.delete();
+                    await FirebaseAuth.instance.signOut();
+                  } catch(e){
+                    FlutterToaster.errorToaster(true, 'deleteAccount - ${e.toString()}');
+                  } finally{
+                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        LoginPage()), (Route<dynamic> route) => false);
+                    FlutterToaster.errorToaster(true, 'Account Deleted');
+                  }
+
+                },
+                icon: Icon(Icons.delete, color: Colors.red),
+                label: Text('wanna delete your account? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+              ),
+              subtitle: Text('After deleting, you can\'t recover any data', textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey.withOpacity(0.9)),)
+          )
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -79,7 +118,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
-                      FlutterToaster.warningToaster(true, 'Your Account will be deleted');
+                      HapticFeedback.vibrate();
+                      showModalBottomSheet<void>(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20.0))),
+                        context: context,
+                        isDismissible: true,
+                        builder: (BuildContext context) {
+                          return bottomLoaderDelete(context);
+                        },
+                      );
+
+                      //FlutterToaster.warningToaster(true, 'Your Account will be deleted');
+                      // showDialog(context: context, builder: (BuildContext context) =>  AlertDialog(
+                      //   title: Text('Hello'),
+                      //   content: ListTile(
+                      //     title: Text('Are you sure to delete your account?', style: TextStyle(color: Colors.red[500]),),
+                      //     subtitle: Text('After deleting, you can \'t recover any data.'),
+                      //   )
+                      //
+                      // ));
+
                     },
                     child: Container(
                       child: Row(
