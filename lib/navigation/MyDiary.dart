@@ -67,7 +67,7 @@ class _MyDiaryState extends State<MyDiary> {
                     enableFeedback: true,
                     primary: searchByDate ? Colors.blue[500] : Colors.grey ,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)
+                        borderRadius: BorderRadius.circular(20.0)
                     )
                 ),
               ),
@@ -80,7 +80,7 @@ class _MyDiaryState extends State<MyDiary> {
                     primary: findAllDiary ? Colors.blue[500] : Colors.grey ,
                     enableFeedback: true,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)
+                        borderRadius: BorderRadius.circular(20.0)
                     )
                 ),
               ),

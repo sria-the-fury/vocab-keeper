@@ -23,7 +23,6 @@ class _ReadDiaryState extends State<ReadDiary> {
 
   var deltaText;
   var newDeltaText;
-  var updateDelta;
 
   bool isEditable = false;
 
@@ -31,12 +30,26 @@ class _ReadDiaryState extends State<ReadDiary> {
     setState(() {
       isEditable = true;
       newDeltaText = widget.diaryData['diaryTextDelta'];
+
+      _quillController = QuillController(document: Document.fromJson(jsonDecode(newDeltaText)),selection: TextSelection.collapsed(offset: 0));
+      _quillController!.addListener(() {
+        setState(() {
+          newDeltaText = jsonEncode((_quillController!.document.toDelta().toJson()));
+        });
+      });
+
     });
   }
   _closeEdit(){
     setState(() {
       isEditable = false;
+      deltaText = widget.diaryData['diaryTextDelta'];
       _quillController = QuillController(document: Document.fromJson(jsonDecode(deltaText)), selection: TextSelection.collapsed(offset: 0));
+      _quillController!.addListener(() {
+        setState(() {
+          newDeltaText = jsonEncode((_quillController!.document.toDelta().toJson()));
+        });
+      });
     });
   }
 
@@ -46,20 +59,14 @@ class _ReadDiaryState extends State<ReadDiary> {
     super.initState();
     setState(() {
       deltaText = widget.diaryData['diaryTextDelta'];
-      if(isEditable){
-        _quillController = QuillController(document: Document.fromJson(jsonDecode(newDeltaText)),selection: TextSelection.collapsed(offset: 0));
-      } else{
+      if(isEditable == false){
         _quillController = QuillController(document: Document.fromJson(jsonDecode(deltaText)), selection: TextSelection.collapsed(offset: 0));
       }
 
 
     });
 
-    _quillController!.addListener(() {
-      setState(() {
-        newDeltaText = jsonEncode((_quillController!.document.toDelta().toJson()));
-      });
-    });
+
 
 
   }
@@ -83,7 +90,6 @@ class _ReadDiaryState extends State<ReadDiary> {
   Widget build(BuildContext context) {
 
 
-
     return
       Scaffold(body: SafeArea (
           child: Container(
@@ -95,29 +101,58 @@ class _ReadDiaryState extends State<ReadDiary> {
                     child:  Row(
                       mainAxisAlignment: Widgets.MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(onPressed: isEditable ? () {
-                          _closeEdit();
-                        }
-                            : ()
-                        {
+                        IconButton(onPressed:
+                        isEditable == false ?
+                            () {
                           Navigator.of(context).pop();
+                        }
+                            : (newDeltaText != null && (newDeltaText.toString() != deltaText.toString())) ?
+
+
+                            () {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: Widgets.Text('Discard'),
+                              content: Widgets.Text('Are you sure to discard editing?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                                  child: Widgets.Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, 'OK');
+                                    _closeEdit();
+                                  },
+                                  child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
+                                ),
+                              ],
+                            ),
+                          );
+                        } :
+
+                            () {
+                          _closeEdit();
                         },
                             icon: isEditable ? Icon(Icons.close) : Icon(Icons.arrow_back)
                         ),
-                        Visibility(
-                          visible: isEditable,
-                          child:  ElevatedButton.icon(
-                            onPressed: newDeltaText != null && (newDeltaText.toString() != deltaText.toString()) ? (){ _updateDiary();} : null,
-                            icon: Icon(Icons.cloud),
-                            label: Widgets.Text('UPDATE'),
-                            style: ElevatedButton.styleFrom(
-                                enableFeedback: true,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0)
-                                )
-                            ),
+                        ElevatedButton.icon(
+                          onPressed: isEditable == false ? () {
+                            HapticFeedback.vibrate();
+                            _editDiary();
+                          } :
+                          (newDeltaText != null && (newDeltaText.toString() != deltaText.toString())) ? (){ _updateDiary();} : null,
+                          icon: isEditable ? Icon(Icons.cloud) : Icon(Icons.edit),
+                          label: Widgets.Text( isEditable ? 'UPDATE' : 'EDIT'),
+                          style: ElevatedButton.styleFrom(
+                              enableFeedback: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)
+                              )
                           ),
                         ),
+
                         Container(
                           padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 2.0),
                           decoration: BoxDecoration(
@@ -143,31 +178,21 @@ class _ReadDiaryState extends State<ReadDiary> {
 
 
                 Expanded(
-                  child: GestureDetector(
-                    onLongPress: () {
-                      HapticFeedback.vibrate();
-                      _editDiary();
-                    },
-                    child: SingleChildScrollView(
-                      scrollDirection: Widgets.Axis.vertical,
-                      child: QuillEditor(
-                        controller: _quillController!,
-                        autoFocus: isEditable,
-                        focusNode: FocusNode(),
-                        readOnly: !isEditable,
-                        scrollable: false,
-                        expands: false,
-                        showCursor: isEditable,
-                        scrollController: ScrollController(),
-                        padding: EdgeInsets.all(5),
-                      ),
+                  child: SingleChildScrollView(
+                    scrollDirection: Widgets.Axis.vertical,
+                    child: QuillEditor(
+                      controller: _quillController!,
+                      autoFocus: isEditable,
+                      focusNode: FocusNode(),
+                      readOnly: !isEditable,
+                      scrollable: false,
+                      expands: false,
+                      showCursor: isEditable,
+                      scrollController: ScrollController(),
+                      padding: EdgeInsets.all(5),
                     ),
                   ),
                 )
-
-
-
-
 
               ],
             ),

@@ -39,6 +39,8 @@ dependencies:
   intl:
   flutter_tts: ^3.2.2
   flutter_quill: ^1.9.5
+  fluttertoast: ^8.0.8
+  package_info: ^2.0.2
 
 dev_dependencies:
   flutter_test:

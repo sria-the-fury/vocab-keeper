@@ -76,7 +76,7 @@ class _MyVocabState extends State<MyVocab> {
                   enableFeedback: true,
                   primary: searchByDate ? Colors.blue[500] : Colors.grey,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0)
+                    borderRadius: BorderRadius.circular(20.0)
                   )
                 ),
               ),
@@ -89,7 +89,7 @@ class _MyVocabState extends State<MyVocab> {
                     enableFeedback: true,
                     primary: findAllVocab ? Colors.blue[500] : Colors.grey,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)
+                        borderRadius: BorderRadius.circular(20.0)
                     )
                 ),
               ),
