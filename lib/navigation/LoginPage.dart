@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
 import 'package:vocab_keeper/navigation/HomePage.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage ({Key? key}) : super(key: key);
@@ -48,10 +49,12 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                 HomePage()), (Route<dynamic>route) => false);
           });
+          FlutterToaster.defaultToaster(true, 'signed as ${hasCurrentUser.email}');
 
         } else{
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
               HomePage()), (Route<dynamic>route) => false);
+          FlutterToaster.defaultToaster(true, 'signed as ${hasCurrentUser.email}');
         }
 
       }

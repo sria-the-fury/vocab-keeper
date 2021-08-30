@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 class UserManagement{
   static storeCurrentUserData(user) async{
@@ -12,10 +12,7 @@ class UserManagement{
         'joinedAt': DateTime.now()
       });
     }catch(e){
-      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
-    }
-    finally{
-      SnackBar(content: Text('user data added', style: TextStyle(color: Colors.white),), backgroundColor: Colors.green[500],);
+      FlutterToaster.errorToaster(true, 'storeCurrentUserData - ${e.toString()}');
     }
 
   }

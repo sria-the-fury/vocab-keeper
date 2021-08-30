@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:vocab_keeper/firebase/VocabularyManagement.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:vocab_keeper/utilities/TextToSpeech.dart';
 
 
@@ -51,12 +52,10 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                   try{
                     await VocabularyManagement().deleteVocab(vocabId);
                   } catch (e){
-                    final snackBar = SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    FlutterToaster.errorToaster(true, 'VocabularyManagement - ${e.toString()}');
 
                   } finally{
-                    final snackBar = SnackBar(content: Text('Deleted', style: TextStyle(color: Colors.white),), backgroundColor: Colors.orange[500],);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    FlutterToaster.warningToaster(true, 'Vocab deleted');
                     Navigator.of(context).pop();
                   }
 

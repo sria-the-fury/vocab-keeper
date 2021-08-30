@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 class VocabularyManagement{
   User? currentUser = FirebaseAuth.instance.currentUser;
@@ -18,7 +19,7 @@ class VocabularyManagement{
 
       });
     }catch(e){
-      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+      FlutterToaster.errorToaster(true, 'addVocabulary - ${e.toString()}');
     }
 
   }
@@ -33,7 +34,7 @@ class VocabularyManagement{
 
       });
     }catch(e){
-      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+      FlutterToaster.errorToaster(true, 'updateVocabulary - ${e.toString()}');
     }
   }
 
@@ -41,7 +42,7 @@ class VocabularyManagement{
     try{
       await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).collection('my-vocabs').doc(vocabId).delete();
     }catch(e){
-      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+      FlutterToaster.errorToaster(true, 'deleteVocab - ${e.toString()}');
     }
   }
 

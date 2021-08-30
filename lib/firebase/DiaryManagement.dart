@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 class DiaryManagement{
 
@@ -16,7 +17,7 @@ class DiaryManagement{
 
       });
     }catch(e){
-      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+      FlutterToaster.errorToaster(true, 'addDiary - ${e.toString()}');
     }
 
   }
@@ -28,7 +29,7 @@ class DiaryManagement{
 
       });
     }catch(e){
-      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+      FlutterToaster.errorToaster(true, 'updateDiary - ${e.toString()}');
     }
   }
 
@@ -36,7 +37,7 @@ class DiaryManagement{
     try{
       await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).collection('my-diary').doc(diaryId).delete();
     }catch(e){
-      SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
+      FlutterToaster.errorToaster(true, 'deleteDiary - ${e.toString()}');
     }
   }
 

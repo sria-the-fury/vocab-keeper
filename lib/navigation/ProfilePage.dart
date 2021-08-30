@@ -1,6 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:vocab_keeper/navigation/LoginPage.dart';
+import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage ({Key? key}) : super(key: key);
@@ -10,14 +16,31 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+  );
 
   User? currentUser = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
 
 
   @override
   Widget build(BuildContext context) {
-
-    print('currentUser => ${currentUser!.metadata.creationTime}');
 
     return Scaffold(
       appBar: AppBar(
@@ -33,15 +56,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   try{
                     await FirebaseAuth.instance.signOut();
                   } catch(e){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(e.toString(), style: TextStyle(color: Colors.white), textAlign: TextAlign.center,), backgroundColor: Colors.red[500],)
-                    );
+                   FlutterToaster.errorToaster(true, 'Sign out - ${e.toString()}');
                   } finally{
                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                         LoginPage()), (Route<dynamic> route) => false);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Logged out', style: TextStyle(color: Colors.white), textAlign: TextAlign.center,), backgroundColor: Colors.orange[500],)
-                    );
+                    FlutterToaster.warningToaster(true, 'Logged out');
                   }
                 },
               )
@@ -92,8 +111,95 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
+
                     ],
                   )
+              ),
+              SizedBox(height: 20.0,),
+
+              Container(
+
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 3),
+                    )
+                  ]
+
+                ),
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+
+                    Container(
+                      height: 40.0,
+                      child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                              alignment:Alignment.topLeft,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+
+                                  Text('Update App', textAlign: TextAlign.left,),
+                                  Text('current version ${_packageInfo.version}', style: TextStyle(fontSize: 12.0),),
+                                ],
+                              )
+                          ),
+                          Container(
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance.collection('app-settings').doc(_packageInfo.packageName).snapshots(),
+                              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+                                if(snapshot.hasData){
+                                  var data = snapshot.data;
+
+                                  return _packageInfo.version != data!['appVersion'] ?
+                                  GestureDetector(
+                                      onTap: () async {
+                                        await canLaunch(data['latestApkUrl']) ? await launch(data['latestApkUrl']) : throw 'Could not launch ${data['latestApkUrl']}';
+                                        FlutterToaster.defaultToaster(true, 'Launching URL');
+                                      },
+                                      child :Column(
+                                        children: [
+                                          Text('New Version ${data['appVersion']}'),
+
+                                          Icon(Icons.cloud_download, color: Colors.green[500],),
+                                        ],
+                                      )
+                                  )   :  Column(
+                                      children: [
+                                        Text('No new update'),
+
+                                        Icon(Icons.cloud_download, color: Colors.grey.withOpacity(0.5),),
+                                      ]
+                                  );
+
+                                } else{
+                                  return CupertinoActivityIndicator();
+                                }
+
+                              },
+                            ),
+
+
+                          )
+
+                        ],
+                      ),
+                    )
+
+                    ,
+
+                  ],
+                ),
               )
             ],
           ),

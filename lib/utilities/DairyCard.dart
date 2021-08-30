@@ -8,6 +8,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/widgets.dart' as Widgets;
 import 'package:intl/intl.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:vocab_keeper/utilities/ReadDiary.dart';
 
 class DiaryCard extends StatefulWidget {
@@ -37,12 +38,10 @@ class _DiaryCardState extends State<DiaryCard> {
                   try{
                     await DiaryManagement().deleteDiary(diaryId);
                   } catch (e){
-                    final snackBar = SnackBar(content: Widgets.Text(e.toString(), style: TextStyle(color: Colors.white),), backgroundColor: Colors.red[500],);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    FlutterToaster.errorToaster(true, 'deleteDiary - ${e.toString()}');
 
                   } finally{
-                    final snackBar = SnackBar(content: Widgets.Text('Deleted', style: TextStyle(color: Colors.white),), backgroundColor: Colors.orange[500],);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    FlutterToaster.warningToaster(true, 'Diary Deleted');
                     Navigator.of(context).pop();
                   }
 
