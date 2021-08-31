@@ -1,3 +1,6 @@
+
+
+
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -6,16 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
-class TextToSpeech extends StatefulWidget {
-  final vocabWord;
-  TextToSpeech ({Key? key, this.vocabWord}) : super(key: key);
+class TextToSpeechSentence extends StatefulWidget {
+  final sentences;
+  final color;
+  TextToSpeechSentence ({Key? key, this.sentences, this.color}) : super(key: key);
 
   @override
-  _TextToSpeechState createState() => _TextToSpeechState();
+  _TextToSpeechSentenceState createState() => _TextToSpeechSentenceState();
 }
 
 
-class _TextToSpeechState extends State<TextToSpeech> {
+class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
   late FlutterTts flutterTts;
   String? language;
   String? engine;
@@ -147,7 +151,7 @@ class _TextToSpeechState extends State<TextToSpeech> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      _newVoiceText = widget.vocabWord;
+      _newVoiceText = widget.sentences;
     });
 
     return _btnSection();
@@ -156,23 +160,21 @@ class _TextToSpeechState extends State<TextToSpeech> {
 
   Widget _btnSection() {
     return Container(
-      child: ttsState == TtsState.stopped ? _buildButtonColumn(Colors.green, Colors.greenAccent,
-          Icons.record_voice_over, 'PLAY', _speak) : _buildButtonColumn(
-          Colors.red, Colors.redAccent, Icons.voice_over_off, 'STOP', _stop),
+      child: ttsState == TtsState.stopped ? _buildButtonColumn(
+          widget.sentences, widget.color, _speak) : _buildButtonColumn(
+           widget.sentences, Colors.green, _stop),
     );
   }
 
 
-  Column _buildButtonColumn(Color color, Color splashColor, IconData icon,
-      String label, Function func) {
+  Column _buildButtonColumn(String text, Color color, Function func) {
     return Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          IconButton(
-              icon: Icon(icon),
-              color: color,
-              splashColor: splashColor,
+          TextButton(
+              child: Text(text, style: TextStyle(fontSize: 15.0, color: color, fontFamily: 'ZillaSlab-Regular',),textAlign: TextAlign.left),
+
               onPressed: () => func()),
         ]);
   }

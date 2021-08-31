@@ -7,6 +7,7 @@ import 'package:vocab_keeper/firebase/VocabularyManagement.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:vocab_keeper/utilities/TextToSpeech.dart';
+import 'package:vocab_keeper/utilities/TextToSpeechSentence.dart';
 
 
 class GesturedAnimatedCard extends StatefulWidget {
@@ -206,8 +207,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 ],
                                               ),
                                             ),
-                                            Text(vocabItems['sentences'],
-                                                style: TextStyle(fontSize: 15.0, color: Colors.black.withOpacity(0.7), fontFamily: 'ZillaSlab-Regular'),textAlign: TextAlign.left),
+                                            TextToSpeechSentence(sentences: vocabItems['sentences'], color: Colors.black.withOpacity(0.7)),
 
 
                                             Text(DateFormat.yMMMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(vocabItems['createdAt'].seconds * 1000, )), style: TextStyle(fontSize: 12.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),),

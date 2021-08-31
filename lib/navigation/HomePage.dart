@@ -33,11 +33,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _themeColorSame() {
-    return (Theme.of(context).primaryColor).toString() == 'MaterialColor(primary value: Color(0xff2196f3))';
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -78,26 +73,33 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: _selectedIndex == 1 ? MainAxisAlignment.spaceAround : MainAxisAlignment.start,
                   children: <Widget>[
 
-                    _selectedIndex == 0 ?
-                    Container(
+                    orientation == Orientation.portrait ? SizedBox(width: 15.0,)  : SizedBox(width: 45.0,),
 
-                      height: 36.0,
-                      padding: EdgeInsets.only(right: 5.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(20.0)
+                    _selectedIndex == 0 ?
+                    GestureDetector(
+                      child: Container(
+
+                          height: 36.0,
+                          padding: EdgeInsets.only(right: 5.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(20.0)
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+
+                              Icon(Icons.spellcheck, size: 25.0,
+                                color: _selectedIndex == 0 ? Colors.white : Colors.white70,),
+                              SizedBox(width: 10.0,),
+                              Text('VOCAB', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
+                            ],
+                          )
                       ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            IconButton(onPressed: (){ _onItemTapped(0);},
-                                icon: Icon(Icons.spellcheck, size: 25.0,
-                                  color: _selectedIndex == 0 ? Colors.white : Colors.white70,)),
-                            Text('VOCAB', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
-                          ],
-                        )
-                    ) : IconButton(onPressed: (){ _onItemTapped(0);},
+                      onTap: (){_onItemTapped(0);},
+                    )
+                        : IconButton(onPressed: (){ _onItemTapped(0);},
                         icon: Icon(Icons.spellcheck, size: 25.0,
                           color: Colors.white70,)),
 
@@ -127,25 +129,28 @@ class _HomePageState extends State<HomePage> {
                     orientation == Orientation.portrait ? SizedBox(width: 40.0,)  : SizedBox(width: 90.0,),
 
                     _selectedIndex == 2 ?
-                    Container(
-                        height: 36.0,
-                        padding: EdgeInsets.only(right: 5.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 2.0),
-                            borderRadius: BorderRadius.circular(20.0)
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            IconButton(onPressed: (){
-                              _onItemTapped(2);
-                            }, icon: Icon(Mdi.notebook,size: 25.0,
-                              color: _selectedIndex == 2 ? Colors.white : Colors.white60 ,)),
-                            Text('DIARY', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
-                          ],
-                        )
-                    ) :
+                    GestureDetector(
+                      onTap: (){  _onItemTapped(2);},
+                      child:  Container(
+                          height: 36.0,
+                          padding: EdgeInsets.only(right: 5.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(20.0)
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Mdi.notebook,size: 25.0,
+                                color: _selectedIndex == 2 ? Colors.white : Colors.white60 ,),
+                              SizedBox(width: 10.0,),
+                              Text('DIARY', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
+                            ],
+                          )
+                      ),
+                    )
+                        :
                     IconButton(onPressed: (){
                       _onItemTapped(2);
                     }, icon: Icon(Mdi.notebook,size: 25.0,
