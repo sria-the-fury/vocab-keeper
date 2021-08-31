@@ -118,7 +118,8 @@ class _AddVocabModalState extends State<AddVocabModal> {
     }
 
     return SimpleDialog(
-      contentPadding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
         titlePadding: EdgeInsets.only(top: 5.0, right: 5.0),
         clipBehavior: Clip.antiAlias,
         title: Row(
@@ -152,68 +153,68 @@ class _AddVocabModalState extends State<AddVocabModal> {
         ),
         children: [
           Column(
-                children: [
-                  ListTile(
-                    title:  TextFormField(
-                      initialValue: isEditing? '' : _initialWord,
-                      onChanged: (value) => setState(() => _addWord = value),
-                      decoration: InputDecoration(
-                        labelText: 'Add Word',
-                        // errorText: 'Error message',
-                        border: OutlineInputBorder(),
+            children: [
+              ListTile(
+                title:  TextFormField(
+                  initialValue: isEditing? '' : _initialWord,
+                  onChanged: (value) => setState(() => _addWord = value),
+                  decoration: InputDecoration(
+                    labelText: 'Add Word',
+                    // errorText: 'Error message',
+                    border: OutlineInputBorder(),
 
-                        prefixIcon: Icon(Icons.spellcheck),
-                      ),
-                    ),
+                    prefixIcon: Icon(Icons.spellcheck),
                   ),
-                  SizedBox(height: 15.0,),
-                  ListTile(
-                    title:  TextFormField(
-                        initialValue: isEditing? '' : _initialEnglishMeaning,
-                        onChanged: (value) => setState(() => _addEnglishMeaning = value),
-                        decoration: InputDecoration(
-                            labelText: 'Meaning of the word in English',
-                            // errorText: 'Error message',
-                            border: OutlineInputBorder(),
-
-                            prefixIcon: Icon(Icons.translate)
-                        )
-                    ),
-                  ),
-                  SizedBox(height: 15.0,),
-                  ListTile(
-                    title:  TextFormField(
-                      initialValue: isEditing? '' : _initialNativeMeaning,
-                      onChanged: (value) => setState(() => _addNativeMeaning = value),
-                      decoration: InputDecoration(
-                        labelText: 'Meaning of the word in Native Language',
-                        // errorText: 'Error message',
-                        border: OutlineInputBorder(),
-
-                        prefixIcon: Icon(Icons.g_translate),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 15.0,),
-                  ListTile(
-                    title:  TextFormField(
-                      initialValue: isEditing? '' : _initialSentences,
-                      onChanged: (value) => setState(() => _addSentences = value),
-                      keyboardType: TextInputType.multiline,
-                      minLines: 1,//Normal textInputField will be displayed
-                      maxLines: 4,
-                      decoration: InputDecoration(
-                        labelText: 'Add Example Sentences',
-                        // errorText: 'Error message',
-                        border: OutlineInputBorder(),
-
-                        prefixIcon: Icon(Icons.notes),
-                      ),
-                    ),
-                  )
-
-                ],
+                ),
               ),
+              SizedBox(height: 15.0,),
+              ListTile(
+                title:  TextFormField(
+                    initialValue: isEditing? '' : _initialEnglishMeaning,
+                    onChanged: (value) => setState(() => _addEnglishMeaning = value),
+                    decoration: InputDecoration(
+                        labelText: 'Meaning in English',
+                        // errorText: 'Error message',
+                        border: OutlineInputBorder(),
+
+                        prefixIcon: Icon(Icons.translate)
+                    )
+                ),
+              ),
+              SizedBox(height: 15.0,),
+              ListTile(
+                title:  TextFormField(
+                  initialValue: isEditing? '' : _initialNativeMeaning,
+                  onChanged: (value) => setState(() => _addNativeMeaning = value),
+                  decoration: InputDecoration(
+                    labelText: 'Meaning in Native',
+                    // errorText: 'Error message',
+                    border: OutlineInputBorder(),
+
+                    prefixIcon: Icon(Icons.g_translate),
+                  ),
+                ),
+              ),
+              SizedBox(height: 15.0,),
+              ListTile(
+                title:  TextFormField(
+                  initialValue: isEditing? '' : _initialSentences,
+                  onChanged: (value) => setState(() => _addSentences = value),
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1,//Normal textInputField will be displayed
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    labelText: 'Add Example Sentences',
+                    // errorText: 'Error message',
+                    border: OutlineInputBorder(),
+
+                    prefixIcon: Icon(Icons.notes),
+                  ),
+                ),
+              )
+
+            ],
+          ),
         ]
     );
   }

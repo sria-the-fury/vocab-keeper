@@ -85,7 +85,10 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text('PROFILE'),
         actions: <Widget> [
-          PopupMenuButton(itemBuilder: (BuildContext context){
+          PopupMenuButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              
+              itemBuilder: (BuildContext context){
             return[
               PopupMenuItem(
                   child:

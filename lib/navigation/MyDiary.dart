@@ -122,7 +122,7 @@ class _MyDiaryState extends State<MyDiary> {
                       )
 
 
-                  ) : Center(child: Text('No Diary'));
+                  ) : Center(child: Text('No Note Found For ${DateFormat.yMMMd().format(DateTime.parse(_date.toString()))}'));
 
                 } else return Center(child: CupertinoActivityIndicator(radius: 20,));
 

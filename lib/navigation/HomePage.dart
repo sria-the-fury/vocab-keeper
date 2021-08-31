@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
 import 'package:vocab_keeper/navigation/MyVocab.dart';
@@ -76,16 +77,37 @@ class _HomePageState extends State<HomePage> {
               builder: (BuildContext context, orientation) => Row(
                   mainAxisAlignment: _selectedIndex == 1 ? MainAxisAlignment.spaceAround : MainAxisAlignment.start,
                   children: <Widget>[
-                    IconButton(onPressed: (){ _onItemTapped(0);},
-                        icon: Icon(Icons.spellcheck, size: _selectedIndex == 0 ? 30.0 : 25.0,
-                          color: _selectedIndex == 0 ? _themeColorSame() ? Colors.white : Colors.blue[500]
-                              : _themeColorSame() ?  Colors.black.withOpacity(0.5) : Colors.grey,)),
-                    orientation == Orientation.portrait ? SizedBox(width: 45.0,)  : SizedBox(width: 100.0,),
+
+                    _selectedIndex == 0 ?
+                    Container(
+
+                      height: 36.0,
+                      padding: EdgeInsets.only(right: 5.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular(20.0)
+                      ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(onPressed: (){ _onItemTapped(0);},
+                                icon: Icon(Icons.spellcheck, size: 25.0,
+                                  color: _selectedIndex == 0 ? Colors.white : Colors.white70,)),
+                            Text('VOCAB', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
+                          ],
+                        )
+                    ) : IconButton(onPressed: (){ _onItemTapped(0);},
+                        icon: Icon(Icons.spellcheck, size: 25.0,
+                          color: Colors.white70,)),
+
+                    orientation == Orientation.portrait ? SizedBox(width: 40.0,)  : SizedBox(width: 90.0,),
+
                     GestureDetector(onTap: (){
                       _onItemTapped(1);
                     }, child: Container(
                       decoration: BoxDecoration(
-                          border: Border.all(color: _selectedIndex == 1 ? _themeColorSame() ? Colors.white : Colors.blue : Colors.transparent , width: 2.0),
+                          border: Border.all(color: _selectedIndex == 1 ? Colors.white : Colors.transparent , width: 2.0),
                           borderRadius: BorderRadius.circular(20.0),
                           boxShadow: [
                             BoxShadow(
@@ -102,11 +124,32 @@ class _HomePageState extends State<HomePage> {
                       ),
                     )
                     ),
-                    orientation == Orientation.portrait ? SizedBox(width: 45.0,)  : SizedBox(width: 100.0,),
+                    orientation == Orientation.portrait ? SizedBox(width: 40.0,)  : SizedBox(width: 90.0,),
+
+                    _selectedIndex == 2 ?
+                    Container(
+                        height: 36.0,
+                        padding: EdgeInsets.only(right: 5.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white, width: 2.0),
+                            borderRadius: BorderRadius.circular(20.0)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(onPressed: (){
+                              _onItemTapped(2);
+                            }, icon: Icon(Mdi.notebook,size: 25.0,
+                              color: _selectedIndex == 2 ? Colors.white : Colors.white60 ,)),
+                            Text('DIARY', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
+                          ],
+                        )
+                    ) :
                     IconButton(onPressed: (){
                       _onItemTapped(2);
-                    }, icon: Icon(Mdi.notebook,size: _selectedIndex == 2 ? 30.0 : 25.0,
-                      color: _selectedIndex == 2 ? _themeColorSame() ? Colors.white : Colors.blue[500] :_themeColorSame() ?  Colors.black.withOpacity(0.5) : Colors.grey ,)),
+                    }, icon: Icon(Mdi.notebook,size: 25.0,
+                      color: Colors.white60 ,)),
 
 
                   ]),

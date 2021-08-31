@@ -138,7 +138,7 @@ class _MyVocabState extends State<MyVocab> {
                             ),
                           );
                         }
-                    ) : Text('ADD YOUR VOCABULARY');
+                    ) : Text('No Vocab Found For ${DateFormat.yMMMd().format(DateTime.parse(_date.toString()))}');
                   }
 
 
