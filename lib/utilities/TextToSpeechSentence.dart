@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 class TextToSpeechSentence extends StatefulWidget {
@@ -23,9 +24,9 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
   late FlutterTts flutterTts;
   String? language;
   String? engine;
-  double volume = 1;
-  double pitch = 1.1;
-  double rate = 0.4;
+  double volume = 1.0;
+  double pitch = 1.0;
+  double rate = 0.5;
   bool isCurrentLanguageInstalled = false;
 
   String? _newVoiceText;
@@ -46,6 +47,7 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
   initState() {
     super.initState();
     initTts();
+    _getPrefsData();
   }
 
   initTts() {
@@ -57,21 +59,18 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
 
     flutterTts.setStartHandler(() {
       setState(() {
-        print("Playing");
         ttsState = TtsState.playing;
       });
     });
 
     flutterTts.setCompletionHandler(() {
       setState(() {
-        print("Complete");
         ttsState = TtsState.stopped;
       });
     });
 
     flutterTts.setCancelHandler(() {
       setState(() {
-        print("Cancel");
         ttsState = TtsState.stopped;
       });
     });
@@ -79,14 +78,12 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
     if (isWeb || isIOS) {
       flutterTts.setPauseHandler(() {
         setState(() {
-          print("Paused");
           ttsState = TtsState.paused;
         });
       });
 
       flutterTts.setContinueHandler(() {
         setState(() {
-          print("Continued");
           ttsState = TtsState.continued;
         });
       });
@@ -94,7 +91,6 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
 
     flutterTts.setErrorHandler((msg) {
       setState(() {
-        print("error: $msg");
         ttsState = TtsState.stopped;
       });
     });
@@ -124,28 +120,28 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
   }
 
 
+  _getPrefsData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var vol = prefs.getString('ttsVolume');
+    var ttsPitch = prefs.getString('ttsPitch');
+    var ttsPitchSpeed = prefs.getString('ttsPitchSpeed');
+
+    setState(() {
+      volume = double.parse(vol!);
+      pitch = double.parse(ttsPitch!);
+      rate = double.parse(ttsPitchSpeed!);
+    });
+
+  }
+
+
   @override
   void dispose() {
     super.dispose();
     flutterTts.stop();
   }
 
-  List<DropdownMenuItem<String>> getEnginesDropDownMenuItems(dynamic engines) {
-    var items = <DropdownMenuItem<String>>[];
-    for (dynamic type in engines) {
-      items.add(DropdownMenuItem(
-          value: type as String?, child: Text(type as String)));
-    }
-    return items;
-  }
 
-  void changedEnginesDropDownItem(String? selectedEngine) {
-    flutterTts.setEngine(selectedEngine!);
-    language = null;
-    setState(() {
-      engine = selectedEngine;
-    });
-  }
 
 
   @override

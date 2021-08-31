@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
 import 'package:vocab_keeper/navigation/LoginPage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
+import 'package:vocab_keeper/utilities/TextToSpeechSettings.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage ({Key? key}) : super(key: key);
@@ -60,6 +62,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     await UserManagement.deleteCurrentUser(currentUser!.uid);
                     await FirebaseAuth.instance.currentUser!.delete();
                     await FirebaseAuth.instance.signOut();
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.clear();
                   } catch(e){
                     FlutterToaster.errorToaster(true, 'deleteAccount - ${e.toString()}');
                   } finally{
@@ -97,6 +101,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       try{
                         await FirebaseAuth.instance.signOut();
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.clear();
                       } catch(e){
                         FlutterToaster.errorToaster(true, 'Sign out - ${e.toString()}');
                       } finally{
@@ -132,16 +138,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           return bottomLoaderDelete(context);
                         },
                       );
-
-                      //FlutterToaster.warningToaster(true, 'Your Account will be deleted');
-                      // showDialog(context: context, builder: (BuildContext context) =>  AlertDialog(
-                      //   title: Text('Hello'),
-                      //   content: ListTile(
-                      //     title: Text('Are you sure to delete your account?', style: TextStyle(color: Colors.red[500]),),
-                      //     subtitle: Text('After deleting, you can \'t recover any data.'),
-                      //   )
-                      //
-                      // ));
 
                     },
                     child: Container(
@@ -289,9 +285,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
                         ],
                       ),
-                    )
-
-                    ,
+                    ),
+                    Divider(color: Colors.white.withOpacity(0.6),),
+                    TextToSpeechSettings(userName: currentUser!.displayName)
 
                   ],
                 ),

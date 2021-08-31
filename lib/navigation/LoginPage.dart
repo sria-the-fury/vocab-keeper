@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
 import 'package:vocab_keeper/navigation/HomePage.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage ({Key? key}) : super(key: key);
@@ -42,9 +43,15 @@ class _LoginPageState extends State<LoginPage> {
 
       User? hasCurrentUser = FirebaseAuth.instance.currentUser;
       if(hasCurrentUser != null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('ttsVolume', '1.0');
+        prefs.setString('ttsPitch', '1.0');
+        prefs.setString('ttsPitchSpeed', '0.5');
+
         if(isSignIn.additionalUserInfo!.isNewUser == true){
 
           UserManagement.storeCurrentUserData(hasCurrentUser);
+
           Timer(Duration(seconds: 3), () {
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                 HomePage()), (Route<dynamic>route) => false);

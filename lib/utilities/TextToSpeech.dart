@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 class TextToSpeech extends StatefulWidget {
@@ -19,9 +20,9 @@ class _TextToSpeechState extends State<TextToSpeech> {
   late FlutterTts flutterTts;
   String? language;
   String? engine;
-  double volume = 1;
-  double pitch = 1.1;
-  double rate = 0.4;
+  double volume = 1.0;
+  double pitch = 1.0;
+  double rate = 0.5;
   bool isCurrentLanguageInstalled = false;
 
   String? _newVoiceText;
@@ -42,6 +43,7 @@ class _TextToSpeechState extends State<TextToSpeech> {
   initState() {
     super.initState();
     initTts();
+    _getPrefsData();
   }
 
   initTts() {
@@ -118,6 +120,21 @@ class _TextToSpeechState extends State<TextToSpeech> {
     var result = await flutterTts.stop();
     if (result == 1) setState(() => ttsState = TtsState.stopped);
   }
+
+  _getPrefsData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var vol = prefs.getString('ttsVolume');
+    var ttsPitch = prefs.getString('ttsPitch');
+    var ttsPitchSpeed = prefs.getString('ttsPitchSpeed');
+
+    setState(() {
+      volume = double.parse(vol!);
+      pitch = double.parse(ttsPitch!);
+      rate = double.parse(ttsPitchSpeed!);
+    });
+
+  }
+
 
 
   @override
