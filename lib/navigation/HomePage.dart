@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
 import 'package:vocab_keeper/navigation/MyVocab.dart';
@@ -33,9 +35,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  @override
+  void dispose(){
+    Hive.close();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
+    print('_selectedIndex => ${_selectedIndex == 1}');
 
     return Scaffold(
         body: Center(
@@ -55,7 +65,7 @@ class _HomePageState extends State<HomePage> {
               // );
               Navigator.of(context).push(new MaterialPageRoute<Null>(
                   builder: (BuildContext context) {
-                    return _selectedIndex == 0 ? new AddVocabModal(isEditing: true, vocabData: null,) :  new AddNoteModal();
+                    return _selectedIndex == 0 ? new AddVocabModal(isEditing: false, vocabData: null,) :  new AddNoteModal();
                   },
                   fullscreenDialog: true
               ));
@@ -73,7 +83,6 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: _selectedIndex == 1 ? MainAxisAlignment.spaceAround : MainAxisAlignment.start,
                   children: <Widget>[
 
-                    orientation == Orientation.portrait ? SizedBox(width: 15.0,)  : SizedBox(width: 45.0,),
 
                     _selectedIndex == 0 ?
                     GestureDetector(

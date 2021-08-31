@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:vocab_keeper/firebase/VocabularyManagement.dart';
+import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:vocab_keeper/utilities/TextToSpeech.dart';
@@ -52,6 +53,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                 onPressed: () async{
                   try{
                     await VocabularyManagement().deleteVocab(vocabId);
+                    deleteVocab(widget.vocabItem);
                   } catch (e){
                     FlutterToaster.errorToaster(true, 'VocabularyManagement - ${e.toString()}');
 
@@ -71,6 +73,15 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
       ),
     );
   }
+
+  void deleteVocab(VocabularyModel vocabularyModel) {
+    // final box = Boxes.getTransactions();
+    // box.delete(transaction.key);
+
+    vocabularyModel.delete();
+    //setState(() => transactions.remove(transaction));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +103,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                     HapticFeedback.vibrate();
                     Navigator.of(context).push(new MaterialPageRoute<Null>(
                         builder: (BuildContext context) {
-                          return new AddVocabModal(isEditing: false, vocabData: vocabItems,);
+                          return new AddVocabModal(isEditing: true, vocabData: vocabItems,);
                         },
                         fullscreenDialog: true
                     ));
@@ -106,17 +117,17 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                       context: context,
                       isDismissible: true,
                       builder: (BuildContext context) {
-                        return bottomLoaderDelete(vocabItems['id'], vocabItems['word'], context);
+                        return bottomLoaderDelete(vocabItems.id, vocabItems.word, context);
                       },
                     );
                   },
                   child: Column(
                     children: [
-                      widget.showAllVocab ? Text('SHOWING ALL VOCABS', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)) :
+                      // widget.showAllVocab ? Text('SHOWING ALL VOCABS', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)) :
 
-                      Text(DateFormat.yMMMd().format(DateTime.parse(widget.searchDate.toString())),
-                        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10.0,),
+                      // Text(DateFormat.yMMMd().format(DateTime.parse(widget.searchDate.toString())),
+                      //   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+                      // SizedBox(height: 10.0,),
                       TweenAnimationBuilder(tween: Tween<double>(begin: 0, end: angle),
                           duration: Duration(seconds: 1),
                           builder: (BuildContext context, double val, __){
@@ -147,8 +158,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           Container(
                                             child: Column(
                                               children: [
-                                                Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.white),),
-                                                TextToSpeech(vocabWord: vocabItems['word'])
+                                                Text(vocabItems.word, style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.white),),
+                                                TextToSpeech(vocabWord: vocabItems.word)
                                               ],
                                             ),
                                           ),
@@ -156,15 +167,15 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           Container(
                                             child: Column(
                                               children: [
-                                                Text(vocabItems['englishMeaning'],
+                                                Text(vocabItems.englishMeaning,
                                                     style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white), textAlign: TextAlign.center),
                                                 SizedBox(height: 20.0,),
-                                                Text(vocabItems['nativeMeaning'], style: TextStyle(fontSize: 25.0, fontFamily: 'Ekushey-Puja', color: Colors.white),textAlign: TextAlign.center),
+                                                Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, fontFamily: 'Ekushey-Puja', color: Colors.white),textAlign: TextAlign.center),
                                               ],
                                             ),
                                           ),
 
-                                          Text(DateFormat.yMMMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(vocabItems['createdAt'].seconds * 1000, )),
+                                          Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt),
                                             style: TextStyle(fontSize: 15.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white),),
                                         ],
                                       ),
@@ -189,8 +200,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                             Container(
                                               child: Column(
                                                 children: [
-                                                  Text(vocabItems['word'], style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
-                                                  TextToSpeech(vocabWord: vocabItems['word'])
+                                                  Text(vocabItems.word, style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
+                                                  TextToSpeech(vocabWord: vocabItems.word)
                                                 ],
                                               ),
                                             ),
@@ -198,19 +209,19 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                             Container(
                                               child: Column(
                                                 children: [
-                                                  Text(vocabItems['englishMeaning'], style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),
+                                                  Text(vocabItems.englishMeaning, style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),
                                                       textAlign: TextAlign.center),
                                                   SizedBox(height: 20.0,),
-                                                  Text(vocabItems['nativeMeaning'], style: TextStyle(fontSize: 25.0, color: Colors.black.withOpacity(0.7),
+                                                  Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, color: Colors.black.withOpacity(0.7),
                                                       fontFamily: 'Ekushey-Puja'),
                                                       textAlign: TextAlign.center),
                                                 ],
                                               ),
                                             ),
-                                            TextToSpeechSentence(sentences: vocabItems['sentences'], color: Colors.black.withOpacity(0.7)),
+                                            TextToSpeechSentence(sentences: vocabItems.sentences, color: Colors.black.withOpacity(0.7)),
 
 
-                                            Text(DateFormat.yMMMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(vocabItems['createdAt'].seconds * 1000, )), style: TextStyle(fontSize: 12.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),),
+                                            Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt), style: TextStyle(fontSize: 12.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),),
                                           ],
                                         ),
 

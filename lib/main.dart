@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
 
 import 'package:vocab_keeper/navigation/HomePage.dart';
 import 'package:vocab_keeper/navigation/LoginPage.dart';
@@ -9,6 +12,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Hive.initFlutter();
+  Hive.registerAdapter(VocabularyModelAdapter());
+  await Hive.openBox<VocabularyModel>('vocabs');
   FirebaseFirestore.instance.settings =
       Settings(persistenceEnabled: false, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
   runApp(MyApp());

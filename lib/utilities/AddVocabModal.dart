@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vocab_keeper/firebase/VocabularyManagement.dart';
+import 'package:vocab_keeper/hive/boxes/Boxes.dart';
+import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
 
 
 class AddVocabModal extends StatefulWidget {
@@ -38,10 +40,10 @@ class _AddVocabModalState extends State<AddVocabModal> {
     if(widget.vocabData != null ){
       var vocabData = widget.vocabData;
       setState(() {
-        _addWord = vocabData['word'];
-        _addEnglishMeaning = vocabData['englishMeaning'];
-        _addNativeMeaning = vocabData['nativeMeaning'];
-        _addSentences = vocabData['sentences'];
+        _addWord = vocabData.word;
+        _addEnglishMeaning = vocabData.englishMeaning;
+        _addNativeMeaning = vocabData.nativeMeaning;
+        _addSentences = vocabData.sentences;
       });
     }
   }
@@ -61,12 +63,26 @@ class _AddVocabModalState extends State<AddVocabModal> {
 
     if(vocabData != null) {
       setState(() {
-        _initialSentences = vocabData['sentences'];
-        _initialWord = vocabData['word'];
-        _initialNativeMeaning = vocabData['nativeMeaning'];
-        _initialEnglishMeaning = vocabData['englishMeaning'];
-        vocabId = vocabData['id'];
+        _initialSentences = vocabData.sentences;
+        _initialWord = vocabData.word;
+        _initialNativeMeaning = vocabData.nativeMeaning;
+        _initialEnglishMeaning = vocabData.englishMeaning;
+        vocabId = vocabData.id;
       });
+    }
+
+    Future addVocab(String word, String englishMeaning, String nativeMeaning, String sentences, DateTime createdAt, String id, String dayMonthYear ) async {
+      final vocab = VocabularyModel()
+        ..word = word
+        ..englishMeaning = englishMeaning
+        ..nativeMeaning = nativeMeaning
+        ..sentences = sentences
+        ..createdAt = createdAt
+        ..id = id
+        ..dayMonthYear = dayMonthYear;
+
+      final box = Boxes.getVocabs();
+      box.add(vocab);
     }
 
 
@@ -84,8 +100,9 @@ class _AddVocabModalState extends State<AddVocabModal> {
 
     addDataToPreference() async {
       var uuid = Uuid();
+      var vocabId = uuid.v4();
       final currentData = {
-        "id": uuid.v4(),
+        "id": vocabId,
         "word": _addWord,
         "englishMeaning": _addEnglishMeaning,
         "nativeMeaning": _addNativeMeaning,
@@ -94,6 +111,8 @@ class _AddVocabModalState extends State<AddVocabModal> {
       };
 
       try {
+        addVocab(_addWord, _addEnglishMeaning, _addNativeMeaning, _addSentences, DateTime.now(), vocabId,
+            '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}');
         await VocabularyManagement().addVocabulary(currentData);
       }
       catch (e) {
@@ -104,8 +123,26 @@ class _AddVocabModalState extends State<AddVocabModal> {
       }
     }
 
+    void editVocab(
+        VocabularyModel vocab,
+        String word,
+        String englishMeaning,
+        String nativeMeaning,
+        String sentences
+        ) {
+      vocab.word = word;
+      vocab.englishMeaning = englishMeaning;
+      vocab.nativeMeaning = nativeMeaning;
+      vocab.sentences = sentences;
+
+
+      vocab.save();
+    }
+    
     updateVocabulary() async {
       try {
+        editVocab(vocabData, _addWord, _addEnglishMeaning, _addNativeMeaning,_addSentences);
+
         await VocabularyManagement().updateVocabulary(vocabId, _addWord, _addEnglishMeaning, _addNativeMeaning, _addSentences);
       }
       catch (e) {
@@ -131,21 +168,38 @@ class _AddVocabModalState extends State<AddVocabModal> {
                 Navigator.of(context).pop();
               },
             ),
-            isEditing ? Visibility(
+            !isEditing ? Visibility(
                 visible: !disableSubmit(),
-                child: FloatingActionButton.extended(
-                    onPressed: () async {
-                      await addDataToPreference();
-                    },
-                    label:  Text('ADD')
+                child: ElevatedButton.icon(
+
+                  onPressed: () async {
+                    await addDataToPreference();
+                  },
+                  label:  Text('ADD'),
+                  icon: Icon(Icons.add),
+                  style: ElevatedButton.styleFrom(
+                      enableFeedback: true,
+                      primary: Colors.blue[500],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)
+                      )
+                  ),
                 )
             ) : Visibility(
                 visible: !disableIfSame(),
-                child: FloatingActionButton.extended(
-                    onPressed: () async {
-                      await updateVocabulary();
-                    },
-                    label:  Text('UPDATE')
+                child: ElevatedButton.icon(
+                  icon: Icon(Icons.cloud),
+                  onPressed: () async {
+                    await updateVocabulary();
+                  },
+                  label:  Text('UPDATE'),
+                  style: ElevatedButton.styleFrom(
+                      enableFeedback: true,
+                      primary: Colors.blue[500],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)
+                      )
+                  ),
                 )
             )
 
@@ -156,7 +210,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
             children: [
               ListTile(
                 title:  TextFormField(
-                  initialValue: isEditing? '' : _initialWord,
+                  initialValue: !isEditing? '' : _initialWord,
                   onChanged: (value) => setState(() => _addWord = value),
                   decoration: InputDecoration(
                     labelText: 'Add Word',
@@ -170,7 +224,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
               SizedBox(height: 15.0,),
               ListTile(
                 title:  TextFormField(
-                    initialValue: isEditing? '' : _initialEnglishMeaning,
+                    initialValue: !isEditing? '' : _initialEnglishMeaning,
                     onChanged: (value) => setState(() => _addEnglishMeaning = value),
                     decoration: InputDecoration(
                         labelText: 'Meaning in English',
@@ -184,7 +238,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
               SizedBox(height: 15.0,),
               ListTile(
                 title:  TextFormField(
-                  initialValue: isEditing? '' : _initialNativeMeaning,
+                  initialValue: !isEditing? '' : _initialNativeMeaning,
                   onChanged: (value) => setState(() => _addNativeMeaning = value),
                   decoration: InputDecoration(
                     labelText: 'Meaning in Native',
@@ -198,7 +252,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
               SizedBox(height: 15.0,),
               ListTile(
                 title:  TextFormField(
-                  initialValue: isEditing? '' : _initialSentences,
+                  initialValue: !isEditing? '' : _initialSentences,
                   onChanged: (value) => setState(() => _addSentences = value),
                   keyboardType: TextInputType.multiline,
                   minLines: 1,//Normal textInputField will be displayed

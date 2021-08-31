@@ -23,7 +23,7 @@ class _TextToSpeechSettingsState extends State<TextToSpeechSettings> {
   String? engine;
   double volume = 1.0;
   double pitch = 1.0;
-  double rate = 0.4;
+  double rate = 0.5;
   bool isCurrentLanguageInstalled = false;
 
 
