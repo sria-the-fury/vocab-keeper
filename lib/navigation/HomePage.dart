@@ -35,11 +35,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  void dispose(){
-    Hive.close();
-    super.dispose();
-  }
+  // @override
+  // void dispose(){
+  //   Hive.close();
+  //   super.dispose();
+  // }
 
 
   @override

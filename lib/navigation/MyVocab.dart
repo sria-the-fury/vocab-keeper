@@ -69,28 +69,34 @@ class _MyVocabState extends State<MyVocab> {
               if(snapshot.hasData){
 
                 var data = snapshot.data!.docs;
-                data.forEach((eachVocab) {
-                  var time = eachVocab['createdAt'];
 
-                  addVocab(eachVocab['word'], eachVocab['englishMeaning'], eachVocab['nativeMeaning'],
-                      eachVocab['sentences'], DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000), eachVocab['id'], eachVocab['dayMonthYear']);
+                if(data.isNotEmpty){
+                  data.forEach((eachVocab) {
+                    var time = eachVocab['createdAt'];
+
+                    addVocab(eachVocab['word'], eachVocab['englishMeaning'], eachVocab['nativeMeaning'],
+                        eachVocab['sentences'], DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000), eachVocab['id'], eachVocab['dayMonthYear']);
 
 
-                });
+                  });
 
-                return Center(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Fetching Vocabs from Cloud'),
-                        LinearProgressIndicator()
-                      ],
+                  return Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Fetching Vocabs from Cloud'),
+                          LinearProgressIndicator()
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  return Center(child: Text('Add Vocabulary'),);
+                }
+
               } else{
                 return Center(child : CupertinoActivityIndicator(radius: 15,));
               }

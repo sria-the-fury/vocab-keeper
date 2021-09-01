@@ -72,27 +72,35 @@ class _MyDiaryState extends State<MyDiary> {
               if(snapshot.hasData){
 
                 var data = snapshot.data!.docs;
-                data.forEach((eachNote) {
-                  var time = eachNote['createdAt'];
 
-                  addNote(eachNote['id'], eachNote['diaryTextDelta'], eachNote['dayMonthYear'], DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000));
+                if(data.isNotEmpty){
+
+                  data.forEach((eachNote) {
+                    var time = eachNote['createdAt'];
+
+                    addNote(eachNote['id'], eachNote['diaryTextDelta'], eachNote['dayMonthYear'], DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000));
 
 
-                });
+                  });
 
-                return Center(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('Fetching Notes from Cloud'),
-                        LinearProgressIndicator()
-                      ],
+                  return Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Fetching Notes from Cloud'),
+                          LinearProgressIndicator()
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+
+                } else {
+                  return Center(child: Text('Add Note'));
+                }
+
               } else{
                 return Center(child : CupertinoActivityIndicator(radius: 15,));
               }
