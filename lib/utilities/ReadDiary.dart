@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart' as Widgets;
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
+import 'package:vocab_keeper/hive/model/DiaryModel.dart';
 
 class ReadDiary extends StatefulWidget {
   final diaryData;
@@ -29,7 +30,7 @@ class _ReadDiaryState extends State<ReadDiary> {
   _editDiary(){
     setState(() {
       isEditable = true;
-      newDeltaText = widget.diaryData['diaryTextDelta'];
+      newDeltaText = widget.diaryData.diaryTextDelta;
 
       _quillController = QuillController(document: Document.fromJson(jsonDecode(newDeltaText)),selection: TextSelection.collapsed(offset: 0));
       _quillController!.addListener(() {
@@ -43,7 +44,7 @@ class _ReadDiaryState extends State<ReadDiary> {
   _closeEdit(){
     setState(() {
       isEditable = false;
-      deltaText = widget.diaryData['diaryTextDelta'];
+      deltaText = widget.diaryData.diaryTextDelta;
       _quillController = QuillController(document: Document.fromJson(jsonDecode(deltaText)), selection: TextSelection.collapsed(offset: 0));
       _quillController!.addListener(() {
         setState(() {
@@ -58,7 +59,7 @@ class _ReadDiaryState extends State<ReadDiary> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      deltaText = widget.diaryData['diaryTextDelta'];
+      deltaText = widget.diaryData.diaryTextDelta;
       if(isEditable == false){
         _quillController = QuillController(document: Document.fromJson(jsonDecode(deltaText)), selection: TextSelection.collapsed(offset: 0));
       }
@@ -66,14 +67,23 @@ class _ReadDiaryState extends State<ReadDiary> {
 
     });
 
-
-
-
   }
+
+  void editNote(
+      DiaryModel diary,
+      String diaryTextDelta,
+
+      ) {
+    diary.diaryTextDelta = diaryTextDelta;
+
+    diary.save();
+  }
+
 
   _updateDiary() async {
     try{
-      DiaryManagement().updateDiary(widget.diaryData['id'], newDeltaText);
+      editNote(widget.diaryData, newDeltaText);
+      DiaryManagement().updateDiary(widget.diaryData.id, newDeltaText);
     }catch(e){
 
     } finally{
@@ -159,7 +169,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                               color: Colors.white.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(10.0)
                           ),
-                          child: Widgets.Text(DateFormat.yMMMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(widget.diaryData['createdAt'].seconds * 1000, )),
+                          child: Widgets.Text(DateFormat.yMMMd().add_jms().format(widget.diaryData.createdAt),
                             style: TextStyle(fontSize: 11.0),),
                         )
 

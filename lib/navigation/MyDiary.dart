@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vocab_keeper/hive/boxes/Boxes.dart';
+import 'package:vocab_keeper/hive/model/DiaryModel.dart';
 import 'package:vocab_keeper/utilities/DairyCard.dart';
 
 class MyDiary extends StatefulWidget {
@@ -29,7 +32,8 @@ class _MyDiaryState extends State<MyDiary> {
     final DateTime? newDate = await showDatePicker(
       context: context,
       initialDate: _date,
-      firstDate: DateTime.parse((currentUser!.metadata.creationTime).toString()),
+      firstDate: DateTime.parse(
+          (currentUser!.metadata.creationTime).toString()),
       lastDate: DateTime.now(),
       helpText: 'Select a date',
     );
@@ -41,6 +45,7 @@ class _MyDiaryState extends State<MyDiary> {
       });
     }
   }
+
   void _searchAllVocab() {
     setState(() {
       searchByDate = false;
@@ -48,89 +53,134 @@ class _MyDiaryState extends State<MyDiary> {
     });
   }
 
+
+
+  Widget buildContent(List<DiaryModel> diary){
+
+    if(diary.isEmpty){
+      print('empty');
+      return Container(
+          child:
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .doc(currentUser!.uid)
+                .collection('my-diary')
+                .snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot ){
+
+              if(snapshot.hasData){
+
+                var data = snapshot.data!.docs;
+                data.forEach((eachNote) {
+                  var time = eachNote['createdAt'];
+
+                  addNote(eachNote['id'], eachNote['diaryTextDelta'], eachNote['dayMonthYear'], DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000));
+
+
+                });
+
+                return Center(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Fetching Vocabs from Cloud'),
+                        LinearProgressIndicator()
+                      ],
+                    ),
+                  ),
+                );
+              } else{
+                return Center(child : CupertinoActivityIndicator(radius: 15,));
+              }
+
+            },
+          ));
+    }
+    else{
+
+      return OrientationBuilder(builder: (context, orientation)=> GridView.count(
+        crossAxisCount: orientation == Orientation.portrait ?  2 : 4,
+        children: new List.generate(diary.length, (index){
+
+
+          return DiaryCard(diaryData: diary[index]) ;
+        }
+        ),
+      )
+
+      );
+
+    }
+
+  }
+
+
+
+  Future addNote(String id, String diaryTextDelta , String dayMonthYear, DateTime createdAt ) async {
+
+    final diary = DiaryModel()
+      ..id = id
+      ..diaryTextDelta = diaryTextDelta
+      ..dayMonthYear = dayMonthYear
+      ..createdAt = createdAt;
+
+
+    final box = Boxes.getDiary();
+    box.add(diary);
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton.icon(
-                onPressed: _selectDate,
-                icon: Icon(Icons.today),
-                label: searchByDate ? Text(DateFormat.yMMMd().format(DateTime.parse(_date.toString()))) : Text('FIND BY DATE'),
-                style: ElevatedButton.styleFrom(
-                    enableFeedback: true,
-                    primary: searchByDate ? Colors.blue[500] : Colors.grey ,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)
-                    )
-                ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton.icon(
+              onPressed: _selectDate,
+              icon: Icon(Icons.today),
+              label: searchByDate
+                  ? Text(
+                  DateFormat.yMMMd().format(DateTime.parse(_date.toString())))
+                  : Text('FIND BY DATE'),
+              style: ElevatedButton.styleFrom(
+                  enableFeedback: true,
+                  primary: searchByDate ? Colors.blue[500] : Colors.grey,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)
+                  )
               ),
+            ),
 
-              ElevatedButton.icon(
-                onPressed: _searchAllVocab,
-                icon: Icon(Icons.description),
-                label: Text('FIND ALL'),
-                style: ElevatedButton.styleFrom(
-                    primary: findAllDiary ? Colors.blue[500] : Colors.grey ,
-                    enableFeedback: true,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)
-                    )
-                ),
+            ElevatedButton.icon(
+              onPressed: _searchAllVocab,
+              icon: Icon(Icons.description),
+              label: Text('FIND ALL'),
+              style: ElevatedButton.styleFrom(
+                  primary: findAllDiary ? Colors.blue[500] : Colors.grey,
+                  enableFeedback: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)
+                  )
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        body: SafeArea(
+      ),
+      body: ValueListenableBuilder<Box<DiaryModel>>(
+          valueListenable: Boxes.getDiary().listenable(),
+          builder: (context, box, _) {
+            final diary = box.values.toList().cast<DiaryModel>();
 
-          child: StreamBuilder<QuerySnapshot>(
-              stream: findAllDiary ?
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(currentUser!.uid)
-                  .collection('my-diary').orderBy('createdAt', descending: true)
-                  .snapshots() :
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(currentUser!.uid)
-                  .collection('my-diary')
-                  .where('dayMonthYear', isEqualTo: '${_date.day}-${_date.month}-${_date.year}').orderBy('createdAt', descending: true)
-                  .snapshots()
-              ,
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
-                if(snapshot.hasData){
-                  var diaryData = snapshot.data!.docs;
-
-                  return diaryData.length > 0 ? OrientationBuilder(builder: (context, orientation)=>
-                      GridView.count(
-
-                        crossAxisCount: orientation == Orientation.portrait ?  2 : 4,
-                        // Generate 100 widgets that display their index in the List.
-                        children: new List.generate(
-                            snapshot.data!.docs.length, (index){
-                          var data = snapshot.data!.docs;
-
-                          return DiaryCard(diaryData: data[index]) ;
-                        }
-                        ),
-                      )
-
-
-                  ) : Center(child: Text('No Note Found For ${DateFormat.yMMMd().format(DateTime.parse(_date.toString()))}'));
-
-                } else return Center(child: CupertinoActivityIndicator(radius: 20,));
-
-              }
-          ),
-        ),
+            return buildContent(diary);
+          }),
 
     );
   }
 }
-
-

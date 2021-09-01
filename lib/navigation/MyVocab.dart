@@ -85,6 +85,7 @@ class _MyVocabState extends State<MyVocab> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        Text('Fetching Vocabs from Cloud'),
                         LinearProgressIndicator()
                       ],
                     ),
@@ -98,7 +99,7 @@ class _MyVocabState extends State<MyVocab> {
           ));
     }
     else{
-      print('data found');
+
       return
         new ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -107,7 +108,7 @@ class _MyVocabState extends State<MyVocab> {
             key: UniqueKey(),
 
             itemBuilder: (BuildContext context, int index){
-              print('vcabs => ${vocabs[index]}');
+
               return Center(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -130,7 +131,7 @@ class _MyVocabState extends State<MyVocab> {
 
 
   Future addVocab(String word, String englishMeaning, String nativeMeaning, String sentences, DateTime createdAt, String id, String dayMonthYear ) async {
-    print('helloooo');
+
     final vocab = VocabularyModel()
       ..word = word
       ..englishMeaning = englishMeaning

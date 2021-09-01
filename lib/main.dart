@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vocab_keeper/hive/model/DiaryModel.dart';
 import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
+
 
 import 'package:vocab_keeper/navigation/HomePage.dart';
 import 'package:vocab_keeper/navigation/LoginPage.dart';
@@ -14,7 +16,9 @@ void main() async {
   await Firebase.initializeApp();
   await Hive.initFlutter();
   Hive.registerAdapter(VocabularyModelAdapter());
+  Hive.registerAdapter(DiaryModelAdapter());
   await Hive.openBox<VocabularyModel>('vocabs');
+  await Hive.openBox<DiaryModel>('diary');
   FirebaseFirestore.instance.settings =
       Settings(persistenceEnabled: false, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
   runApp(MyApp());

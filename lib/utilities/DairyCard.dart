@@ -6,6 +6,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter/widgets.dart' as Widgets;
 import 'package:intl/intl.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
+import 'package:vocab_keeper/hive/model/DiaryModel.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:vocab_keeper/utilities/ReadDiary.dart';
 
@@ -34,6 +35,7 @@ class _DiaryCardState extends State<DiaryCard> {
               title:  TextButton.icon(
                 onPressed: () async{
                   try{
+                    deleteNote(widget.diaryData);
                     await DiaryManagement().deleteDiary(diaryId);
                   } catch (e){
                     FlutterToaster.errorToaster(true, 'deleteDiary - ${e.toString()}');
@@ -54,9 +56,18 @@ class _DiaryCardState extends State<DiaryCard> {
       ),
     );
   }
+
+
+  void deleteNote(DiaryModel diary) {
+    // final box = Boxes.getTransactions();
+    // box.delete(transaction.key);
+
+    diary.delete();
+    //setState(() => transactions.remove(transaction));
+  }
   @override
   Widget build(BuildContext context) {
-    QuillController? _quillController = QuillController(document: Document.fromJson(jsonDecode(widget.diaryData['diaryTextDelta'])), selection: TextSelection.collapsed(offset: 0));
+    QuillController? _quillController = QuillController(document: Document.fromJson(jsonDecode(widget.diaryData.diaryTextDelta)), selection: TextSelection.collapsed(offset: 0));
 
 
     return GestureDetector(
@@ -78,7 +89,7 @@ class _DiaryCardState extends State<DiaryCard> {
           context: context,
           isDismissible: true,
           builder: (BuildContext context) {
-            return bottomLoaderDelete(widget.diaryData['id'], context);
+            return bottomLoaderDelete(widget.diaryData.id, context);
           },
         );
       },
@@ -114,7 +125,7 @@ class _DiaryCardState extends State<DiaryCard> {
                           color: Colors.white.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(10.0)
                       ),
-                      child: Widgets.Text(DateFormat.yMMMd().add_jms().format(DateTime.fromMillisecondsSinceEpoch(widget.diaryData['createdAt'].seconds * 1000, )),
+                      child: Widgets.Text(DateFormat.yMMMd().add_jms().format(widget.diaryData.createdAt),
                         style: TextStyle(fontSize: 11.0),),
                     )
                   ]

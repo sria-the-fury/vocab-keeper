@@ -44,8 +44,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    print('_selectedIndex => ${_selectedIndex == 1}');
+    
 
     return Scaffold(
         body: Center(
@@ -58,11 +57,6 @@ class _HomePageState extends State<HomePage> {
             child: _selectedIndex == 0 ? Lottie.asset('assets/lottie/add-vocab.json') : Lottie.asset('assets/lottie/write-note.json'),
             onPressed: (){
 
-              // showDialog(context: context, builder: (BuildContext context) =>
-              //     AddVocabModal(isEditing: true, vocabData: null)
-              //
-              //
-              // );
               Navigator.of(context).push(new MaterialPageRoute<Null>(
                   builder: (BuildContext context) {
                     return _selectedIndex == 0 ? new AddVocabModal(isEditing: false, vocabData: null,) :  new AddNoteModal();
@@ -87,6 +81,7 @@ class _HomePageState extends State<HomePage> {
                     _selectedIndex == 0 ?
                     GestureDetector(
                       child: Container(
+                        margin: EdgeInsets.only(left: 15.0),
 
                           height: 36.0,
                           padding: EdgeInsets.only(right: 5.0),

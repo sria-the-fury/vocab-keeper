@@ -8,6 +8,8 @@ import 'package:flutter/widgets.dart' as Widgets;
 import 'package:uuid/uuid.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
+import 'package:vocab_keeper/hive/boxes/Boxes.dart';
+import 'package:vocab_keeper/hive/model/DiaryModel.dart';
 
 
 class AddNoteModal extends StatefulWidget {
@@ -35,10 +37,26 @@ class _AddNoteModalState extends State<AddNoteModal> {
     });
   }
 
+  Future addNote(String id, String diaryTextDelta , String dayMonthYear, DateTime createdAt ) async {
+
+    final diary = DiaryModel()
+      ..id = id
+      ..diaryTextDelta = diaryTextDelta
+      ..dayMonthYear = dayMonthYear
+      ..createdAt = createdAt;
+
+
+    final box = Boxes.getDiary();
+    box.add(diary);
+  }
+
   _addNote() async{
     try{
       var uuid = Uuid();
-      await DiaryManagement().addDiary(uuid.v4(), jsonEncode(_quillController.document.toDelta().toJson()));
+      var noteId = uuid.v4();
+      await addNote(noteId, jsonEncode(_quillController.document.toDelta().toJson()),
+          '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}', DateTime.now());
+      await DiaryManagement().addDiary(noteId, jsonEncode(_quillController.document.toDelta().toJson()));
 
     } catch(e){
 

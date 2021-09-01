@@ -138,7 +138,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
 
       vocab.save();
     }
-    
+
     updateVocabulary() async {
       try {
         editVocab(vocabData, _addWord, _addEnglishMeaning, _addNativeMeaning,_addSentences);
