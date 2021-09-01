@@ -215,9 +215,9 @@ class _TextToSpeechSettingsState extends State<TextToSpeechSettings> {
                 TextButton(
                   child: Row(
                     children: [
-                      Icon(Icons.record_voice_over, color: ttsState == TtsState.stopped ? Colors.white : Colors.green[500],),
+                  ttsState == TtsState.stopped ? Icon(Icons.record_voice_over) : Icon(Icons.record_voice_over, color: Colors.green[500],),
                       SizedBox(width: 10.0,),
-                      Text('Test Speech', style: TextStyle(color: ttsState == TtsState.stopped ? Colors.white : Colors.green[500]),),
+                      ttsState == TtsState.stopped ? Text('Test Speech') : Text('Test Speech', style: TextStyle(color:Colors.green[500]),),
                     ],
                   ),
 
@@ -264,7 +264,7 @@ class _TextToSpeechSettingsState extends State<TextToSpeechSettings> {
         min: 0.0,
         max: 1.0,
         divisions: 10,
-        activeColor: Colors.white,
+        activeColor: Colors.green[500],
         label: "Volume: ${(volume * 100).toStringAsFixed(0)}%");
 
   }
@@ -279,7 +279,7 @@ class _TextToSpeechSettingsState extends State<TextToSpeechSettings> {
       max: 2.0,
       divisions: 15,
       label: "Pitch: ${(pitch * 100).toStringAsFixed(0)}",
-      activeColor: Colors.white,
+      activeColor: Colors.red[500],
     );
   }
 
@@ -293,7 +293,6 @@ class _TextToSpeechSettingsState extends State<TextToSpeechSettings> {
       max: 1.0,
       divisions: 10,
       label: "Rate: ${(rate * 100).toStringAsFixed(0)}",
-        activeColor: Colors.white,
     );
   }
 }

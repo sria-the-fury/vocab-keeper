@@ -23,8 +23,8 @@ class _MyVocabState extends State<MyVocab> {
   User? currentUser = FirebaseAuth.instance.currentUser;
   DateTime _date = DateTime.now();
 
-  bool findAllVocab = false;
-  bool searchByDate = true;
+  bool findAllVocab = true;
+  bool searchByDate = false;
 
 
 
@@ -100,11 +100,17 @@ class _MyVocabState extends State<MyVocab> {
     }
     else{
 
-      return
-        new ListView.builder(
+      var findByDayMonthYear = vocabs.where((element) => element.dayMonthYear == '${_date.day}-${_date.month}-${_date.year}').toList();
+
+      return searchByDate == true && findByDayMonthYear.length == 0 ?
+          Center(
+            child: Text('No vocab found for ${DateFormat.yMMMd().format(DateTime.parse(_date.toString()))} '),
+          )
+
+          : ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: vocabs.length,
+            itemCount: findAllVocab ? vocabs.length : findByDayMonthYear.length,
             key: UniqueKey(),
 
             itemBuilder: (BuildContext context, int index){
@@ -116,7 +122,7 @@ class _MyVocabState extends State<MyVocab> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GesturedAnimatedCard(vocabItem: vocabs[index], searchDate: _date, showAllVocab: findAllVocab),
+                      GesturedAnimatedCard(vocabItem: findAllVocab ?  vocabs[index] : findByDayMonthYear[index], searchDate: _date, showAllVocab: findAllVocab),
 
                     ],
                   ),

@@ -24,8 +24,8 @@ class _MyDiaryState extends State<MyDiary> {
   User? currentUser = FirebaseAuth.instance.currentUser;
   DateTime _date = DateTime.now();
 
-  bool findAllDiary = false;
-  bool searchByDate = true;
+  bool findAllDiary = true;
+  bool searchByDate = false;
 
 
   void _selectDate() async {
@@ -87,7 +87,7 @@ class _MyDiaryState extends State<MyDiary> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('Fetching Vocabs from Cloud'),
+                        Text('Fetching Notes from Cloud'),
                         LinearProgressIndicator()
                       ],
                     ),
@@ -101,13 +101,19 @@ class _MyDiaryState extends State<MyDiary> {
           ));
     }
     else{
+      var findByDayMonthYear = diary.where((element) => element.dayMonthYear == '${_date.day}-${_date.month}-${_date.year}').toList();
 
-      return OrientationBuilder(builder: (context, orientation)=> GridView.count(
+      return searchByDate == true && findByDayMonthYear.length == 0 ? Center(
+        child: Text('No Note found for ${DateFormat.yMMMd().format(DateTime.parse(_date.toString()))} '),
+      )
+
+
+    : OrientationBuilder(builder: (context, orientation)=> GridView.count(
         crossAxisCount: orientation == Orientation.portrait ?  2 : 4,
-        children: new List.generate(diary.length, (index){
+        children: new List.generate(findAllDiary ? diary.length : findByDayMonthYear.length, (index){
 
 
-          return DiaryCard(diaryData: diary[index]) ;
+          return DiaryCard(diaryData: findAllDiary ? diary[index] : findByDayMonthYear[index]) ;
         }
         ),
       )
