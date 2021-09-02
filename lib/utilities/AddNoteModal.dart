@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as Widgets;
 import 'package:uuid/uuid.dart';
@@ -24,6 +25,7 @@ class _AddNoteModalState extends State<AddNoteModal> {
   QuillController _quillController = QuillController.basic();
   final FocusNode _focusNode = FocusNode();
   String diaryText = '';
+  bool isAddingNote = false;
 
 
 
@@ -54,6 +56,9 @@ class _AddNoteModalState extends State<AddNoteModal> {
 
   _addNote() async{
     try{
+      setState(() {
+        isAddingNote = true;
+      });
       var uuid = Uuid();
       var noteId = uuid.v4();
       await addNote(noteId, jsonEncode(_quillController.document.toDelta().toJson()),
@@ -66,6 +71,9 @@ class _AddNoteModalState extends State<AddNoteModal> {
     }
     finally{
       Navigator.of(context).pop();
+      setState(() {
+        isAddingNote = false;
+      });
       FlutterToaster.successToaster(true, 'Note Added');
     }
   }
@@ -111,17 +119,18 @@ class _AddNoteModalState extends State<AddNoteModal> {
           )
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).accentColor,
         onPressed: diaryText.length > 1 ?
             () {
           _addNote();
         }
-            :
+            : isAddingNote ? () {} :
             () {
           Navigator.of(context).pop();
         },
-        child: diaryText.length > 1 ? Icon(Icons.save) :Icon(Icons.chevron_left),
+        child: diaryText.length > 1 && !isAddingNote ? Icon(Icons.save, color: Colors.white,) : isAddingNote ?
+         CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.chevron_left, color: Colors.white),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

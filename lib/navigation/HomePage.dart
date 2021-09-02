@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -153,9 +154,27 @@ class _HomePageState extends State<HomePage> {
                             )
                           ]
                       ),
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage((hasCurrentUser!.photoURL).toString()),
-                        radius: _selectedIndex == 1 ? 18.0 : 15.0,
+                      child: CachedNetworkImage(
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                        imageUrl: (hasCurrentUser!.photoURL).toString(),
+                        height: _selectedIndex == 1 ? 35 : 30,
+                        width: _selectedIndex == 1 ? 35 : 30,
+                        imageBuilder: (context, imageProvider) =>Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              )
+                          ),
+                        ),
+
+
+
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            CircularProgressIndicator(value: downloadProgress.progress, color: Colors.white,),
+                        errorWidget: (context, url, error) => Icon(Icons.person),
                       ),
                     )
                     ),

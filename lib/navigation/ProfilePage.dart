@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +13,8 @@ import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:vocab_keeper/utilities/TextToSpeechSettings.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity/connectivity.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage ({Key? key}) : super(key: key);
@@ -27,13 +31,65 @@ class _ProfilePageState extends State<ProfilePage> {
     buildNumber: 'Unknown',
   );
 
+  String _connectionStatus = 'unknown';
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
     _initPackageInfo();
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
   }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    ConnectivityResult result = ConnectivityResult.none;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  _getConnection(){
+    return _connectionStatus == 'unknown' || _connectionStatus == 'failed' || _connectionStatus == 'ConnectivityResult.none';
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    switch (result) {
+      case ConnectivityResult.wifi:
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.none:
+        setState(() => _connectionStatus = result.toString());
+        break;
+      default:
+        setState(() => _connectionStatus = 'failed');
+        break;
+    }
+  }
+
+
 
   Future<void> _initPackageInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
@@ -44,6 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
   Widget bottomLoaderDelete(context) {
+
 
     return Container(
       height: 80,
@@ -84,6 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   @override
   Widget build(BuildContext context) {
+    print('_getConnection => ${_getConnection()}');
 
     return Scaffold(
       appBar: AppBar(
@@ -174,8 +232,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.5),
-                          spreadRadius: 3,
-                          blurRadius: 5,
+                          spreadRadius: 2,
+                          blurRadius: 3,
                           offset: Offset(0, 3),
                         )
                       ]
@@ -184,21 +242,44 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage((currentUser!.photoURL).toString()),
-                        radius: 50.0,
-                      ),
+                       CachedNetworkImage(
+                          alignment: Alignment.center,
+                          fit: BoxFit.cover,
+                         imageUrl: (currentUser!.photoURL).toString(),
+                          height: 100,
+                          width: 100,
+                          imageBuilder: (context, imageProvider) =>Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.0),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              )
+                            ),
+                          ),
+
+
+
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              CircularProgressIndicator(value: downloadProgress.progress, color: Colors.white,),
+                          errorWidget: (context, url, error) => Icon(Icons.person),
+                        ),
+
+                      // CircleAvatar(
+                      //   backgroundImage: NetworkImage((currentUser!.photoURL).toString()),
+                      //   radius: 50.0,
+                      // ),
                       SizedBox(height: 10.0),
-                      Text((currentUser!.displayName).toString(), style: TextStyle(fontSize: 20.0),),
+                      Text((currentUser!.displayName).toString(), style: TextStyle(fontSize: 20.0, color: Colors.white),),
                       SizedBox(height: 10.0,),
                       Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Icon(Icons.email, size: 20.0,),
+                            Icon(Icons.email, size: 20.0, color: Colors.white),
                             SizedBox(width: 5.0,),
-                            Text((currentUser!.email).toString(), style: TextStyle(fontSize: 16.0),)
+                            Text((currentUser!.email).toString(), style: TextStyle(fontSize: 16.0, color: Colors.white),)
                           ],
                         ),
                       ),
@@ -246,7 +327,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               )
                           ),
                           Container(
-                            child: StreamBuilder(
+                            child: !_getConnection() ?  StreamBuilder(
                               stream: FirebaseFirestore.instance.collection('app-settings').doc(_packageInfo.packageName).snapshots(),
                               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
                                 if(snapshot.hasData){
@@ -278,7 +359,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 }
 
                               },
-                            ),
+                            ) : Icon(Icons.signal_wifi_statusbar_null, color: Colors.grey),
 
 
                           )

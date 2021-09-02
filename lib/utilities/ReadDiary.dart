@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart' as Widgets;
@@ -28,6 +29,7 @@ class _ReadDiaryState extends State<ReadDiary> {
   var newDeltaText;
 
   bool isEditable = false;
+  bool isUpdating = false;
 
   _editDiary(){
     setState(() {
@@ -85,6 +87,9 @@ class _ReadDiaryState extends State<ReadDiary> {
 
   _updateDiary() async {
     try{
+      setState(() {
+        isUpdating = true;
+      });
       editNote(widget.diaryData, newDeltaText);
       DiaryManagement().updateDiary(widget.diaryData.id, newDeltaText);
     }catch(e){
@@ -92,6 +97,7 @@ class _ReadDiaryState extends State<ReadDiary> {
 
     } finally{
       setState(() {
+        isUpdating = false;
         isEditable = false;
         deltaText = newDeltaText;
         _quillController = QuillController(document: Document.fromJson(jsonDecode(newDeltaText)), selection: TextSelection.collapsed(offset: 0));
@@ -152,18 +158,22 @@ class _ReadDiaryState extends State<ReadDiary> {
                         },
                             icon: isEditable ? Icon(Icons.close) : Icon(Icons.arrow_back)
                         ),
-                        ElevatedButton.icon(
+
+                        isUpdating ?
+                        CupertinoActivityIndicator(radius: 12.0,)
+                            :
+                        ElevatedButton(
                           onPressed: isEditable == false ? () {
                             HapticFeedback.vibrate();
                             _editDiary();
                           } :
                           (newDeltaText.toString() == deltaText.toString()) || newDeltaText.length == 17 ? null : _updateDiary,
-                          icon: isEditable ? Icon(Icons.cloud) : Icon(Icons.edit),
-                          label: Widgets.Text( isEditable ? 'UPDATE' : 'EDIT'),
+                          child: isEditable ? Icon(Icons.cloud) : Icon(Icons.edit),
+                          //label: Widgets.Text( isEditable ? 'UPDATE' : 'EDIT'),
                           style: ElevatedButton.styleFrom(
                               enableFeedback: true,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)
+                                  borderRadius: BorderRadius.circular(30.0)
                               )
                           ),
                         ),
@@ -174,7 +184,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                               color: Colors.white.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(10.0)
                           ),
-                          child: Widgets.Text(DateFormat.yMMMd().add_jms().format(widget.diaryData.createdAt),
+                          child: Widgets.Text(DateFormat('EEEE, MMM dd y', 'en_US').add_jms().format(widget.diaryData.createdAt),
                             style: TextStyle(fontSize: 11.0),),
                         )
 
@@ -197,12 +207,12 @@ class _ReadDiaryState extends State<ReadDiary> {
                     scrollDirection: Widgets.Axis.vertical,
                     child: QuillEditor(
                       controller: _quillController!,
-                      autoFocus: isEditable,
+                      autoFocus: true,
                       focusNode: _focusNode,
                       readOnly: !isEditable,
                       scrollable: true,
                       expands: false,
-                      showCursor: isEditable,
+                      showCursor: true,
                       scrollController: ScrollController(),
                       padding: EdgeInsets.all(5),
                     ),

@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uuid/uuid.dart';
@@ -33,7 +34,9 @@ class _AddVocabModalState extends State<AddVocabModal> {
 
   String vocabId = '' ;
 
-  // List<dynamic> allVocabs = [];
+  bool isAdding = false;
+  bool isUpdating = false;
+
 
 
   void _getVocab() async {
@@ -112,6 +115,9 @@ class _AddVocabModalState extends State<AddVocabModal> {
       };
 
       try {
+        setState(() {
+          isAdding = true;
+        });
         addVocab(_addWord, _addEnglishMeaning, _addNativeMeaning, _addSentences, DateTime.now(), vocabId,
             '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}');
         await VocabularyManagement().addVocabulary(currentData);
@@ -121,6 +127,9 @@ class _AddVocabModalState extends State<AddVocabModal> {
       }
       finally {
         Navigator.of(context).pop();
+        setState(() {
+          isAdding = false;
+        });
         FlutterToaster.warningToaster(true, 'Vocab added');
       }
     }
@@ -143,6 +152,9 @@ class _AddVocabModalState extends State<AddVocabModal> {
 
     updateVocabulary() async {
       try {
+        setState(() {
+          isUpdating = true;
+        });
         editVocab(vocabData, _addWord, _addEnglishMeaning, _addNativeMeaning,_addSentences);
 
         await VocabularyManagement().updateVocabulary(vocabId, _addWord, _addEnglishMeaning, _addNativeMeaning, _addSentences);
@@ -153,6 +165,9 @@ class _AddVocabModalState extends State<AddVocabModal> {
       }
       finally {
         Navigator.of(context).pop();
+        setState(() {
+          isUpdating = false;
+        });
         FlutterToaster.warningToaster(true, 'Vocab updated');
       }
 
@@ -174,7 +189,12 @@ class _AddVocabModalState extends State<AddVocabModal> {
             ),
             !isEditing ? Visibility(
                 visible: !disableSubmit(),
-                child: ElevatedButton.icon(
+                child: isAdding ? Container(
+                  padding: EdgeInsets.only(right: 10.0),
+                    child: CupertinoActivityIndicator(radius: 12.0,)
+                )
+                    :
+                ElevatedButton.icon(
 
                   onPressed: () async {
                     await addDataToPreference();
@@ -189,7 +209,17 @@ class _AddVocabModalState extends State<AddVocabModal> {
                       )
                   ),
                 )
-            ) : Visibility(
+            ) :
+
+            isUpdating ?
+            Container(
+                padding: EdgeInsets.only(right: 10.0),
+                child: CupertinoActivityIndicator(radius: 12.0,)
+            )
+
+                :
+
+            Visibility(
                 visible: !disableIfSame(),
                 child: ElevatedButton.icon(
                   icon: Icon(Icons.cloud),
