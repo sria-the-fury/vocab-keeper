@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
+import 'package:quick_actions/quick_actions.dart';
 import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
 import 'package:vocab_keeper/navigation/MyVocab.dart';
@@ -20,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final quickActions = QuickActions();
   User? hasCurrentUser = FirebaseAuth.instance.currentUser;
   int _selectedIndex = 0;
 
@@ -40,6 +40,35 @@ class _HomePageState extends State<HomePage> {
   //   Hive.close();
   //   super.dispose();
   // }
+
+  @override
+  initState(){
+    super.initState();
+    quickActions.setShortcutItems([
+      ShortcutItem(type: 'addNote', localizedTitle: 'Write Note', icon: 'icon_write_note'),
+      ShortcutItem(type: 'addVocab', localizedTitle: 'Add Vocab', icon: 'icon_add_vocab'),
+    ]);
+
+    quickActions.initialize((type) {
+      if(type == 'addNote'){
+        Navigator.of(context).push(new MaterialPageRoute<Null>(
+            builder: (BuildContext context) {
+              return new AddNoteModal();
+            },
+            fullscreenDialog: true
+        ));
+      } else if(type == 'addVocab'){
+        Navigator.of(context).push(new MaterialPageRoute<Null>(
+            builder: (BuildContext context) {
+              return new AddVocabModal(isEditing: false, vocabData: null,);
+            },
+            fullscreenDialog: true
+        ));
+      }
+
+    });
+
+  }
 
 
   @override
