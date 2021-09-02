@@ -10,6 +10,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
 import 'package:vocab_keeper/hive/boxes/Boxes.dart';
 import 'package:vocab_keeper/hive/model/DiaryModel.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 
 class AddNoteModal extends StatefulWidget {
@@ -21,6 +22,7 @@ class AddNoteModal extends StatefulWidget {
 
 class _AddNoteModalState extends State<AddNoteModal> {
   QuillController _quillController = QuillController.basic();
+  final FocusNode _focusNode = FocusNode();
   String diaryText = '';
 
 
@@ -59,10 +61,12 @@ class _AddNoteModalState extends State<AddNoteModal> {
       await DiaryManagement().addDiary(noteId, jsonEncode(_quillController.document.toDelta().toJson()));
 
     } catch(e){
+      FlutterToaster.successToaster(true, 'addNote ${e.toString()}');
 
     }
     finally{
       Navigator.of(context).pop();
+      FlutterToaster.successToaster(true, 'Note Added');
     }
   }
 
@@ -87,7 +91,7 @@ class _AddNoteModalState extends State<AddNoteModal> {
                         child: QuillEditor(
                           controller: _quillController,
                           autoFocus: true,
-                          focusNode: FocusNode(),
+                          focusNode: _focusNode,
                           readOnly: false,
                           scrollable: true,
                           expands: false,

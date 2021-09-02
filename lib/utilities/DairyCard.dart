@@ -38,10 +38,10 @@ class _DiaryCardState extends State<DiaryCard> {
                     deleteNote(widget.diaryData);
                     await DiaryManagement().deleteDiary(diaryId);
                   } catch (e){
-                    FlutterToaster.errorToaster(true, 'deleteDiary - ${e.toString()}');
+                    FlutterToaster.errorToaster(true, 'deleteNote - ${e.toString()}');
 
                   } finally{
-                    FlutterToaster.warningToaster(true, 'Diary Deleted');
+                    FlutterToaster.warningToaster(true, 'Note Deleted');
                     Navigator.of(context).pop();
                   }
 
@@ -99,7 +99,7 @@ class _DiaryCardState extends State<DiaryCard> {
               width: 180,
               margin: EdgeInsets.all(10.0),
               decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).accentColor.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(10.0)
               ),
               // child: Widgets.Text('hello'),
@@ -109,13 +109,12 @@ class _DiaryCardState extends State<DiaryCard> {
                   children : [
 
                     Container(
-                      height: 145,
                       padding: EdgeInsets.all(5.0),
 
                       child: SingleChildScrollView(
 
                         scrollDirection: Axis.vertical,
-                        child: Widgets.Text(_quillController.document.toPlainText()),
+                        child: Widgets.Text(_quillController.document.toPlainText(), maxLines: 10,),
                       ),
                     ),
 

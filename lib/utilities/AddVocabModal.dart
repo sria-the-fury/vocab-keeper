@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:vocab_keeper/firebase/VocabularyManagement.dart';
 import 'package:vocab_keeper/hive/boxes/Boxes.dart';
 import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 
 class AddVocabModal extends StatefulWidget {
@@ -116,10 +117,11 @@ class _AddVocabModalState extends State<AddVocabModal> {
         await VocabularyManagement().addVocabulary(currentData);
       }
       catch (e) {
-
+        FlutterToaster.errorToaster(true, 'addVocab - ${e.toString()}');
       }
       finally {
         Navigator.of(context).pop();
+        FlutterToaster.warningToaster(true, 'Vocab added');
       }
     }
 
@@ -147,9 +149,11 @@ class _AddVocabModalState extends State<AddVocabModal> {
       }
       catch (e) {
 
+        FlutterToaster.errorToaster(true, 'updateVocab - ${e.toString()}');
       }
       finally {
         Navigator.of(context).pop();
+        FlutterToaster.warningToaster(true, 'Vocab updated');
       }
 
     }

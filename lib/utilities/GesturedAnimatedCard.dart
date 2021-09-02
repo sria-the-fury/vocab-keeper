@@ -55,7 +55,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                     await VocabularyManagement().deleteVocab(vocabId);
                     deleteVocab(widget.vocabItem);
                   } catch (e){
-                    FlutterToaster.errorToaster(true, 'VocabularyManagement - ${e.toString()}');
+                    FlutterToaster.errorToaster(true, 'VocabDelete - ${e.toString()}');
 
                   } finally{
                     FlutterToaster.warningToaster(true, 'Vocab deleted');

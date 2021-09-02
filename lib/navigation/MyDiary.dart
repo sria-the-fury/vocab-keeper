@@ -65,7 +65,7 @@ class _MyDiaryState extends State<MyDiary> {
             stream: FirebaseFirestore.instance
                 .collection('users')
                 .doc(currentUser!.uid)
-                .collection('my-diary')
+                .collection('my-diary').orderBy('createdAt', descending: false)
                 .snapshots(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot ){
 
@@ -109,7 +109,11 @@ class _MyDiaryState extends State<MyDiary> {
           ));
     }
     else{
-      var findByDayMonthYear = diary.where((element) => element.dayMonthYear == '${_date.day}-${_date.month}-${_date.year}').toList();
+      var reverseDiary = List.from(diary.reversed);
+      var findByDayMonthYear = reverseDiary.where((element) => element.dayMonthYear == '${_date.day}-${_date.month}-${_date.year}').toList();
+
+      var count = MediaQuery.of(context).size.width / 185;
+
 
       return searchByDate == true && findByDayMonthYear.length == 0 ? Center(
         child: Text('No Note found for ${DateFormat.yMMMd().format(DateTime.parse(_date.toString()))} '),
@@ -117,11 +121,11 @@ class _MyDiaryState extends State<MyDiary> {
 
 
     : OrientationBuilder(builder: (context, orientation)=> GridView.count(
-        crossAxisCount: orientation == Orientation.portrait ?  2 : 4,
-        children: new List.generate(findAllDiary ? diary.length : findByDayMonthYear.length, (index){
+        crossAxisCount: count.toInt(),
+        children: new List.generate(findAllDiary ? reverseDiary.length : findByDayMonthYear.length, (index){
 
 
-          return DiaryCard(diaryData: findAllDiary ? diary[index] : findByDayMonthYear[index]) ;
+          return DiaryCard(diaryData: findAllDiary ? reverseDiary[index] : findByDayMonthYear[index]) ;
         }
         ),
       )

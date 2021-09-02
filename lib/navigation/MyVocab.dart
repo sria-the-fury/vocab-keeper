@@ -62,7 +62,7 @@ class _MyVocabState extends State<MyVocab> {
             stream: FirebaseFirestore.instance
                 .collection('users')
                 .doc(currentUser!.uid)
-                .collection('my-vocabs')
+                .collection('my-vocabs').orderBy('createdAt', descending: false)
                 .snapshots(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot ){
 
@@ -106,7 +106,9 @@ class _MyVocabState extends State<MyVocab> {
     }
     else{
 
-      var findByDayMonthYear = vocabs.where((element) => element.dayMonthYear == '${_date.day}-${_date.month}-${_date.year}').toList();
+      var reverseVocab = List.from(vocabs.reversed);
+
+      var findByDayMonthYear = reverseVocab.where((element) => element.dayMonthYear == '${_date.day}-${_date.month}-${_date.year}').toList();
 
       return searchByDate == true && findByDayMonthYear.length == 0 ?
           Center(
@@ -116,7 +118,7 @@ class _MyVocabState extends State<MyVocab> {
           : ListView.builder(
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: findAllVocab ? vocabs.length : findByDayMonthYear.length,
+            itemCount: findAllVocab ? reverseVocab.length : findByDayMonthYear.length,
             key: UniqueKey(),
 
             itemBuilder: (BuildContext context, int index){
@@ -128,7 +130,7 @@ class _MyVocabState extends State<MyVocab> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GesturedAnimatedCard(vocabItem: findAllVocab ?  vocabs[index] : findByDayMonthYear[index], searchDate: _date, showAllVocab: findAllVocab),
+                      GesturedAnimatedCard(vocabItem: findAllVocab ?  reverseVocab[index] : findByDayMonthYear[index], searchDate: _date, showAllVocab: findAllVocab),
 
                     ],
                   ),

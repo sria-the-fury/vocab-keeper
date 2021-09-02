@@ -7,6 +7,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
 import 'package:vocab_keeper/hive/model/DiaryModel.dart';
+import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 class ReadDiary extends StatefulWidget {
   final diaryData;
@@ -21,6 +22,7 @@ class _ReadDiaryState extends State<ReadDiary> {
 
 
   QuillController? _quillController;
+  final FocusNode _focusNode = FocusNode();
 
   var deltaText;
   var newDeltaText;
@@ -61,6 +63,7 @@ class _ReadDiaryState extends State<ReadDiary> {
     setState(() {
       deltaText = widget.diaryData.diaryTextDelta;
       if(isEditable == false){
+        newDeltaText = deltaText;
         _quillController = QuillController(document: Document.fromJson(jsonDecode(deltaText)), selection: TextSelection.collapsed(offset: 0));
       }
 
@@ -85,11 +88,14 @@ class _ReadDiaryState extends State<ReadDiary> {
       editNote(widget.diaryData, newDeltaText);
       DiaryManagement().updateDiary(widget.diaryData.id, newDeltaText);
     }catch(e){
+      FlutterToaster.successToaster(true, 'updateDiary ${e.toString()}');
 
     } finally{
       setState(() {
         isEditable = false;
+        deltaText = newDeltaText;
         _quillController = QuillController(document: Document.fromJson(jsonDecode(newDeltaText)), selection: TextSelection.collapsed(offset: 0));
+        FlutterToaster.successToaster(true, 'Note Updated');
       });
     }
 
@@ -98,7 +104,6 @@ class _ReadDiaryState extends State<ReadDiary> {
 
   @override
   Widget build(BuildContext context) {
-
 
     return
       Scaffold(body: SafeArea (
@@ -112,11 +117,11 @@ class _ReadDiaryState extends State<ReadDiary> {
                       mainAxisAlignment: Widgets.MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(onPressed:
-                        isEditable == false ?
+                        isEditable == false || newDeltaText.length == 17 ?
                             () {
                           Navigator.of(context).pop();
                         }
-                            : (newDeltaText != null && (newDeltaText.toString() != deltaText.toString())) ?
+                            : (newDeltaText.toString() != deltaText.toString()) ?
 
 
                             () {
@@ -152,7 +157,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                             HapticFeedback.vibrate();
                             _editDiary();
                           } :
-                          (newDeltaText != null && (newDeltaText.toString() != deltaText.toString())) ? (){ _updateDiary();} : null,
+                          (newDeltaText.toString() == deltaText.toString()) || newDeltaText.length == 17 ? null : _updateDiary,
                           icon: isEditable ? Icon(Icons.cloud) : Icon(Icons.edit),
                           label: Widgets.Text( isEditable ? 'UPDATE' : 'EDIT'),
                           style: ElevatedButton.styleFrom(
@@ -192,10 +197,10 @@ class _ReadDiaryState extends State<ReadDiary> {
                     scrollDirection: Widgets.Axis.vertical,
                     child: QuillEditor(
                       controller: _quillController!,
-                      autoFocus: true,
-                      focusNode: FocusNode(),
+                      autoFocus: isEditable,
+                      focusNode: _focusNode,
                       readOnly: !isEditable,
-                      scrollable: false,
+                      scrollable: true,
                       expands: false,
                       showCursor: isEditable,
                       scrollController: ScrollController(),
