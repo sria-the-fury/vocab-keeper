@@ -212,7 +212,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                       readOnly: !isEditable,
                       scrollable: true,
                       expands: false,
-                      showCursor: true,
+                      showCursor: isEditable,
                       scrollController: ScrollController(),
                       padding: EdgeInsets.all(5),
                     ),

@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -20,6 +21,8 @@ class DiaryCard extends StatefulWidget {
 
 class _DiaryCardState extends State<DiaryCard> {
 
+  bool isDeleting = false;
+
   Widget bottomLoaderDelete(diaryId, context) {
 
     return Container(
@@ -32,23 +35,38 @@ class _DiaryCardState extends State<DiaryCard> {
       child: Center(
           child:
           ListTile(
-              title:  TextButton.icon(
+              title: isDeleting ? null : TextButton(
                 onPressed: () async{
                   try{
+                    setState(() {
+                      isDeleting = true;
+                    });
                     deleteNote(widget.diaryData);
                     await DiaryManagement().deleteDiary(diaryId);
                   } catch (e){
                     FlutterToaster.errorToaster(true, 'deleteNote - ${e.toString()}');
 
                   } finally{
-                    FlutterToaster.warningToaster(true, 'Note Deleted');
+                    setState(() {
+                      isDeleting = false;
+                    });
                     Navigator.of(context).pop();
+                    FlutterToaster.warningToaster(true, 'Note Deleted');
+
                   }
 
-
                 },
-                icon: Icon(Icons.delete, color: Colors.red),
-                label: Widgets.Text('wanna delete this? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      isDeleting ? CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.delete, color: Colors.red),
+                      SizedBox(width: 5.0,),
+                      Widgets.Text('wanna delete this? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                    ],
+                  ),
+                ),
               ),
               subtitle: Widgets.Text('After deleting, you can\'t get it anymore', textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),)

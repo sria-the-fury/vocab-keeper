@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +30,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
 
   bool isBack = true;
   double angle = 0;
+  bool isDeleting = false;
 
   _flip() {
     setState(() {
@@ -49,23 +51,38 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
       child: Center(
           child:
           ListTile(
-              title:  TextButton.icon(
-                onPressed: () async{
+              title:  TextButton(
+                onPressed: isDeleting ? null : () async{
                   try{
+                    setState(() {
+                      isDeleting = true;
+                    });
                     await VocabularyManagement().deleteVocab(vocabId);
                     deleteVocab(widget.vocabItem);
                   } catch (e){
                     FlutterToaster.errorToaster(true, 'VocabDelete - ${e.toString()}');
 
                   } finally{
-                    FlutterToaster.warningToaster(true, 'Vocab deleted');
+                    setState(() {
+                      isDeleting = false;
+                    });
                     Navigator.of(context).pop();
+                    FlutterToaster.warningToaster(true, 'Vocab deleted');
                   }
 
 
                 },
-                icon: Icon(Icons.delete, color: Colors.red),
-                label: Text('wanna delete $word? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      isDeleting ? CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.delete, color: Colors.red),
+                      SizedBox(width: 5.0,),
+                      Text('wanna delete $word? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                    ],
+                  ),
+                ),
               ),
               subtitle: Text('After deleting, you can\'t get it anymore', textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),)
@@ -75,11 +92,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
   }
 
   void deleteVocab(VocabularyModel vocabularyModel) {
-    // final box = Boxes.getTransactions();
-    // box.delete(transaction.key);
 
     vocabularyModel.delete();
-    //setState(() => transactions.remove(transaction));
   }
 
 
@@ -198,7 +212,9 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Container(
-                                              child: Column(
+                                              child: Row(
+                                                mainAxisAlignment:MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   Text(vocabItems.word, style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
                                                   TextToSpeech(vocabWord: vocabItems.word)
@@ -206,20 +222,70 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                               ),
                                             ),
 
+
                                             Container(
-                                              child: Column(
-                                                children: [
-                                                  Text(vocabItems.englishMeaning, style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),
+                                              height: 120.0,
+                                              alignment: Alignment.center,
+
+                                              decoration: BoxDecoration(
+                                                  color: Colors.black.withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(10.0)
+                                              ),
+                                              child:CupertinoScrollbar(
+                                                isAlwaysShown: true,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.vertical,
+
+                                                  child:  Text(vocabItems.englishMeaning, style: TextStyle(fontSize: 23.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),
                                                       textAlign: TextAlign.center),
-                                                  SizedBox(height: 20.0,),
-                                                  Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, color: Colors.black.withOpacity(0.7),
-                                                      fontFamily: 'Ekushey-Puja'),
-                                                      textAlign: TextAlign.center),
-                                                ],
+                                                ),
+
                                               ),
                                             ),
-                                            TextToSpeechSentence(sentences: vocabItems.sentences, color: Colors.black.withOpacity(0.7)),
 
+
+
+                                            Container(
+                                              height: 80.0,
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.all(5.0),
+                                              margin: EdgeInsets.only(top: 3.0, bottom: 3.0),
+
+                                              decoration: BoxDecoration(
+                                                  color: Colors.black.withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(10.0)
+                                              ),
+                                              child:CupertinoScrollbar(
+                                                isAlwaysShown: true,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.vertical,
+
+                                                  child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 22.0, color: Colors.black.withOpacity(0.7),
+                                                      fontFamily: 'Ekushey-Puja'),
+                                                      textAlign: TextAlign.center),
+                                                ),
+
+                                              ),
+                                            ),
+
+                                            Container(
+                                              height: 120.0,
+                                              alignment: Alignment.center,
+
+                                              decoration: BoxDecoration(
+                                                  color: Colors.black.withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(10.0)
+                                              ),
+                                              child:CupertinoScrollbar(
+                                                isAlwaysShown: true,
+                                                child: SingleChildScrollView(
+                                                  scrollDirection: Axis.vertical,
+
+                                                  child: TextToSpeechSentence(sentences: vocabItems.sentences, color: Colors.black.withOpacity(0.7)),
+                                                ),
+
+                                              ),
+                                            ),
 
                                             Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt), style: TextStyle(fontSize: 12.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),),
                                           ],
