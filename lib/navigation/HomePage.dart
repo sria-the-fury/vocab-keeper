@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
@@ -45,6 +46,8 @@ class _HomePageState extends State<HomePage> {
   @override
   initState(){
     super.initState();
+    // var brightness = SchedulerBinding.instance!.window.platformBrightness;
+    // bool theme = brightness == Brightness.dark;
     quickActions.setShortcutItems([
       ShortcutItem(type: 'addNote', localizedTitle: 'Write Note', icon: 'icon_write_note'),
       ShortcutItem(type: 'addVocab', localizedTitle: 'Add Vocab', icon: 'icon_add_vocab'),
