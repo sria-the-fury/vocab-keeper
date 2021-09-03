@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
 import 'package:vocab_keeper/navigation/LoginPage.dart';
@@ -34,6 +35,8 @@ class _ProfilePageState extends State<ProfilePage> {
   String _connectionStatus = 'unknown';
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  bool isDeleting = false;
 
   User? currentUser = FirebaseAuth.instance.currentUser;
 
@@ -72,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return _updateConnectionStatus(result);
   }
 
-  _getConnection(){
+  _getNoConnection(){
     return _connectionStatus == 'unknown' || _connectionStatus == 'failed' || _connectionStatus == 'ConnectivityResult.none';
   }
 
@@ -112,26 +115,44 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Center(
           child:
           ListTile(
-              title:  TextButton.icon(
-                onPressed: () async{
+              title:  TextButton(
+                onPressed: _getNoConnection() || isDeleting ? null : () async{
 
                   try{
+                    setState(() {
+                      isDeleting = true;
+                    });
                     await UserManagement.deleteCurrentUser(currentUser!.uid);
                     await FirebaseAuth.instance.currentUser!.delete();
                     await FirebaseAuth.instance.signOut();
+                    Hive.box('vocabs').clear();
+                    Hive.box('diary').clear();
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.clear();
                   } catch(e){
                     FlutterToaster.errorToaster(true, 'deleteAccount - ${e.toString()}');
                   } finally{
+                    setState(() {
+                      isDeleting = false;
+                    });
                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                         LoginPage()), (Route<dynamic> route) => false);
                     FlutterToaster.errorToaster(true, 'Account Deleted');
                   }
 
                 },
-                icon: Icon(Icons.delete, color: Colors.red),
-                label: Text('wanna delete your account? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      isDeleting ? CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.person, color: Colors.red),
+                      SizedBox(width: 5.0,),
+                      Text( isDeleting ? 'hold on, deleting your account.' : 'wanna delete your account? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                    ],
+                  ),
+                ),
               ),
               subtitle: Text('After deleting, you can\'t recover any data', textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),)
@@ -141,7 +162,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   @override
   Widget build(BuildContext context) {
-    print('_getConnection => ${_getConnection()}');
 
     return Scaffold(
       appBar: AppBar(
@@ -159,6 +179,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       try{
                         await FirebaseAuth.instance.signOut();
+                        Hive.box('vocabs').clear();
+                        Hive.box('diary').clear();
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.clear();
                       } catch(e){
@@ -265,10 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           errorWidget: (context, url, error) => Icon(Icons.person),
                         ),
 
-                      // CircleAvatar(
-                      //   backgroundImage: NetworkImage((currentUser!.photoURL).toString()),
-                      //   radius: 50.0,
-                      // ),
+
                       SizedBox(height: 10.0),
                       Text((currentUser!.displayName).toString(), style: TextStyle(fontSize: 20.0, color: Colors.white),),
                       SizedBox(height: 10.0,),
@@ -327,13 +346,13 @@ class _ProfilePageState extends State<ProfilePage> {
                               )
                           ),
                           Container(
-                            child: !_getConnection() ?  StreamBuilder(
+                            child: !_getNoConnection() ?  StreamBuilder(
                               stream: FirebaseFirestore.instance.collection('app-settings').doc(_packageInfo.packageName).snapshots(),
                               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
                                 if(snapshot.hasData){
                                   var data = snapshot.data;
 
-                                  return _packageInfo.version != data!['appVersion'] ?
+                                  return data!.exists && _packageInfo.version != data['appVersion'] ?
                                   GestureDetector(
                                       onTap: () async {
                                         await canLaunch(data['latestApkUrl']) ? await launch(data['latestApkUrl']) : throw 'Could not launch ${data['latestApkUrl']}';

@@ -63,7 +63,7 @@ class _DiaryCardState extends State<DiaryCard> {
                     children: [
                       isDeleting ? CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.delete, color: Colors.red),
                       SizedBox(width: 5.0,),
-                      Widgets.Text('wanna delete this? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                      Widgets.Text( isDeleting ? 'deleting..' : 'wanna delete this? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
                     ],
                   ),
                 ),
