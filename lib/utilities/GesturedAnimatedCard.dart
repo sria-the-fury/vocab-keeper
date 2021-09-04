@@ -170,9 +170,11 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Container(
-                                            child: Column(
+                                            child: Row(
+                                              mainAxisAlignment:MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
-                                                Text(vocabItems.word, style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.white),),
+                                                Text(vocabItems.word, style: TextStyle(fontSize: 35.0, fontFamily: 'Lobster-Regular', color: Colors.white.withOpacity(0.7)),),
                                                 TextToSpeech(vocabWord: vocabItems.word)
                                               ],
                                             ),
@@ -212,11 +214,12 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Container(
+                                              alignment: Alignment.center,
                                               child: Row(
                                                 mainAxisAlignment:MainAxisAlignment.center,
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                  Text(vocabItems.word, style: TextStyle(fontSize: 40.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
+                                                  Text(vocabItems.word, style: TextStyle(fontSize: 35.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
                                                   TextToSpeech(vocabWord: vocabItems.word)
                                                 ],
                                               ),
@@ -232,7 +235,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                   borderRadius: BorderRadius.circular(10.0)
                                               ),
                                               child:CupertinoScrollbar(
-                                                isAlwaysShown: true,
+
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
@@ -256,7 +259,6 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                   borderRadius: BorderRadius.circular(10.0)
                                               ),
                                               child:CupertinoScrollbar(
-                                                isAlwaysShown: true,
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
@@ -277,7 +279,6 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                   borderRadius: BorderRadius.circular(10.0)
                                               ),
                                               child:CupertinoScrollbar(
-                                                isAlwaysShown: true,
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 

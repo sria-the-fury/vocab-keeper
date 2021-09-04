@@ -114,8 +114,7 @@ class _DiaryCardState extends State<DiaryCard> {
       child:Center(
           child: Container(
               height: 200,
-              width: 180,
-              margin: EdgeInsets.all(10.0),
+              width: 190,
               decoration: BoxDecoration(
                   color: Theme.of(context).accentColor.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(10.0)
@@ -128,22 +127,41 @@ class _DiaryCardState extends State<DiaryCard> {
 
                     Container(
                       padding: EdgeInsets.all(5.0),
+                      height: 165,
 
                       child: SingleChildScrollView(
 
                         scrollDirection: Axis.vertical,
-                        child: Widgets.Text(_quillController.document.toPlainText(), maxLines: 10,),
+                        child: QuillEditor(
+                          controller: _quillController,
+                          autoFocus: false,
+                          focusNode: Widgets.FocusNode(),
+                          readOnly: true,
+                          scrollable: true,
+                          expands: false,
+                          showCursor: false,
+                          enableInteractiveSelection: false,
+                          scrollController: ScrollController(),
+                          padding: EdgeInsets.all(5),
+                        ),
                       ),
                     ),
 
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 2.0),
+                      padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 6.0),
                       decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(10.0)
                       ),
-                      child: Widgets.Text(DateFormat.yMMMd().add_jms().format(widget.diaryData.createdAt),
-                        style: TextStyle(fontSize: 11.0),),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Widgets.Text(DateFormat.yMMMd().add_jms().format(widget.diaryData.createdAt),
+                            style: TextStyle(fontSize: 11.0),),
+                          Icon(Icons.navigate_next, size: 20.0,)
+                        ],
+                      )
+
                     )
                   ]
               )
@@ -152,3 +170,5 @@ class _DiaryCardState extends State<DiaryCard> {
     );
   }
 }
+
+// Widgets.Text(_quillController.document.toPlainText(), maxLines: 10,)

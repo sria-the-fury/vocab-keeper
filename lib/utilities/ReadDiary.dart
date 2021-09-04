@@ -179,7 +179,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                         ),
 
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 2.0),
+                          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                           decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(10.0)

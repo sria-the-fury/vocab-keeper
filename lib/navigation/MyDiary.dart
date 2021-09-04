@@ -122,6 +122,8 @@ class _MyDiaryState extends State<MyDiary> {
 
     : OrientationBuilder(builder: (context, orientation)=> GridView.count(
         crossAxisCount: count.toInt(),
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
         children: new List.generate(findAllDiary ? reverseDiary.length : findByDayMonthYear.length, (index){
 
 
