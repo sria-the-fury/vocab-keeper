@@ -9,7 +9,8 @@ class UserManagement{
         'userId': user.uid,
         'userName': user.displayName,
         'photoURL': user.photoURL,
-        'joinedAt': DateTime.now()
+        'joinedAt': DateTime.now(),
+        'isPublic' : false
       });
     }catch(e){
       FlutterToaster.errorToaster(true, 'storeCurrentUserData - ${e.toString()}');

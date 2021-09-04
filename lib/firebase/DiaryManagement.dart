@@ -13,7 +13,8 @@ class DiaryManagement{
         "id": diaryId,
         'diaryTextDelta' : diaryData,
         "createdAt" : DateTime.now(),
-        "dayMonthYear" : '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}'
+        "dayMonthYear" : '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}',
+        "isPublicDiary" : false
 
       });
     }catch(e){
