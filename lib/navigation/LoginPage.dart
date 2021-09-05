@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive/hive.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
+import 'package:vocab_keeper/hive/model/DiaryModel.dart';
+import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
 import 'package:vocab_keeper/navigation/HomePage.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,6 +32,9 @@ class _LoginPageState extends State<LoginPage> {
         return bottomLoader();
       },
     );
+    await Hive.openBox<VocabularyModel>('vocabs');
+    await Hive.openBox<DiaryModel>('diary');
+
 
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     if(googleUser != null ){

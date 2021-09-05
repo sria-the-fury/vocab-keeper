@@ -9,6 +9,8 @@ import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
+import 'package:vocab_keeper/hive/boxes/Boxes.dart';
+import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
 import 'package:vocab_keeper/navigation/LoginPage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -122,11 +124,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     setState(() {
                       isDeleting = true;
                     });
+                    var vocabBox = Boxes.getVocabs();
+                    var diaryBox = Boxes.getDiary();
+                    vocabBox.clear();
+                    diaryBox.clear();
                     await UserManagement.deleteCurrentUser(currentUser!.uid);
                     await FirebaseAuth.instance.currentUser!.delete();
                     await FirebaseAuth.instance.signOut();
-                    Hive.box('vocabs').clear();
-                    Hive.box('diary').clear();
+
                     SharedPreferences prefs = await SharedPreferences.getInstance();
                     prefs.clear();
                   } catch(e){
@@ -179,8 +184,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       try{
                         await FirebaseAuth.instance.signOut();
-                        Hive.box('vocabs').clear();
-                        Hive.box('diary').clear();
+                        var vocabBox = Boxes.getVocabs();
+                        var diaryBox = Boxes.getDiary();
+                        vocabBox.clear();
+                        diaryBox.clear();
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         prefs.clear();
                       } catch(e){
