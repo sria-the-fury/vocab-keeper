@@ -41,13 +41,14 @@ class _AddNoteModalState extends State<AddNoteModal> {
     });
   }
 
-  Future addNote(String id, String diaryTextDelta , String dayMonthYear, DateTime createdAt ) async {
+  Future addNote(String id, String diaryTextDelta , String dayMonthYear, DateTime createdAt, bool isPublicDiary ) async {
 
     final diary = DiaryModel()
       ..id = id
       ..diaryTextDelta = diaryTextDelta
       ..dayMonthYear = dayMonthYear
-      ..createdAt = createdAt;
+      ..createdAt = createdAt
+    ..isPublicDiary = isPublicDiary;
 
 
     final box = Boxes.getDiary();
@@ -62,7 +63,7 @@ class _AddNoteModalState extends State<AddNoteModal> {
       var uuid = Uuid();
       var noteId = uuid.v4();
       await addNote(noteId, jsonEncode(_quillController.document.toDelta().toJson()),
-          '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}', DateTime.now());
+          '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}', DateTime.now(), false);
       await DiaryManagement().addDiary(noteId, jsonEncode(_quillController.document.toDelta().toJson()));
 
     } catch(e){

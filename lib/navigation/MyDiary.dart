@@ -78,7 +78,7 @@ class _MyDiaryState extends State<MyDiary> {
                   data.forEach((eachNote) {
                     var time = eachNote['createdAt'];
 
-                    addNote(eachNote['id'], eachNote['diaryTextDelta'], eachNote['dayMonthYear'], DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000));
+                    addNote(eachNote['id'], eachNote['diaryTextDelta'], eachNote['dayMonthYear'], DateTime.fromMillisecondsSinceEpoch(time.seconds * 1000), eachNote['isPublicDiary']);
 
 
                   });
@@ -140,13 +140,14 @@ class _MyDiaryState extends State<MyDiary> {
 
 
 
-  Future addNote(String id, String diaryTextDelta , String dayMonthYear, DateTime createdAt ) async {
+  Future addNote(String id, String diaryTextDelta , String dayMonthYear, DateTime createdAt, bool isPublicDiary ) async {
 
     final diary = DiaryModel()
       ..id = id
       ..diaryTextDelta = diaryTextDelta
       ..dayMonthYear = dayMonthYear
-      ..createdAt = createdAt;
+      ..createdAt = createdAt
+    ..isPublicDiary = isPublicDiary;
 
 
     final box = Boxes.getDiary();

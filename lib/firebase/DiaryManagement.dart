@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 
 class DiaryManagement{
@@ -31,6 +30,17 @@ class DiaryManagement{
       });
     }catch(e){
       FlutterToaster.errorToaster(true, 'updateDiary - ${e.toString()}');
+    }
+  }
+
+  updateNotePublic(noteId, value) async {
+    try{
+      await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).collection('my-diary').doc(noteId).update({
+        'isPublicDiary' : value,
+
+      });
+    }catch(e){
+      FlutterToaster.errorToaster(true, 'share note - ${e.toString()}');
     }
   }
 

@@ -18,6 +18,9 @@ class DiaryModel extends HiveObject{
   @HiveField(3)
   late DateTime createdAt;
 
+  @HiveField(4)
+  late bool isPublicDiary;
+
 
 
 }

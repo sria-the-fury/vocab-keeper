@@ -20,13 +20,14 @@ class DiaryModelAdapter extends TypeAdapter<DiaryModel> {
       ..id = fields[0] as String
       ..diaryTextDelta = fields[1] as String
       ..dayMonthYear = fields[2] as String
-      ..createdAt = fields[3] as DateTime;
+      ..createdAt = fields[3] as DateTime
+      ..isPublicDiary = fields[4] as bool;
   }
 
   @override
   void write(BinaryWriter writer, DiaryModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -34,7 +35,9 @@ class DiaryModelAdapter extends TypeAdapter<DiaryModel> {
       ..writeByte(2)
       ..write(obj.dayMonthYear)
       ..writeByte(3)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(4)
+      ..write(obj.isPublicDiary);
   }
 
   @override
