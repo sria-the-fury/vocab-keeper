@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
@@ -119,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                           height: 36.0,
                           padding: EdgeInsets.only(right: 5.0),
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2.0),
+                              border: Border.all(color: Colors.white, width: 1.0),
                               borderRadius: BorderRadius.circular(20.0)
                           ),
                           child: Row(
@@ -190,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                           height: 36.0,
                           padding: EdgeInsets.only(right: 5.0),
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2.0),
+                              border: Border.all(color: Colors.white, width: 1.0),
                               borderRadius: BorderRadius.circular(20.0)
                           ),
                           child: Row(

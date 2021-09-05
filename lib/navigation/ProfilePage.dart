@@ -346,32 +346,41 @@ class _ProfilePageState extends State<ProfilePage> {
                               )
                           ),
                           Container(
-                            child: !_getNoConnection() ?  StreamBuilder(
-                              stream: FirebaseFirestore.instance.collection('app-settings').doc(_packageInfo.packageName).snapshots(),
-                              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+                            child: !_getNoConnection() ?  StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance.collection('app-settings').where('appVersion' , isNotEqualTo: _packageInfo.version).snapshots(),
+                              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+                                print('snapshot => ${_packageInfo.packageName}');
                                 if(snapshot.hasData){
-                                  var data = snapshot.data;
+                                  if(snapshot.data!.docs.isNotEmpty){
+                                    var data = snapshot.data!.docs[0];
+                                    return GestureDetector(
+                                        onTap: () async {
+                                          await canLaunch(data['latestApkUrl']) ? await launch(data['latestApkUrl']) : throw 'Could not launch ${data['latestApkUrl']}';
+                                          FlutterToaster.defaultToaster(true, 'Launching URL');
+                                        },
+                                        child :Column(
+                                          children: [
+                                            Text('New Version ${data['appVersion']}'),
 
-                                  return data!.exists && _packageInfo.version != data['appVersion'] ?
-                                  GestureDetector(
-                                      onTap: () async {
-                                        await canLaunch(data['latestApkUrl']) ? await launch(data['latestApkUrl']) : throw 'Could not launch ${data['latestApkUrl']}';
-                                        FlutterToaster.defaultToaster(true, 'Launching URL');
-                                      },
-                                      child :Column(
-                                        children: [
-                                          Text('New Version ${data['appVersion']}'),
+                                            Icon(Icons.cloud_download, color: Colors.green[500],),
+                                          ],
+                                        )
+                                    );
+                                  }
 
-                                          Icon(Icons.cloud_download, color: Colors.green[500],),
-                                        ],
-                                      )
-                                  )   :  Column(
-                                      children: [
-                                        Text('No new update'),
 
-                                        Icon(Icons.cloud_download, color: Colors.grey.withOpacity(0.5),),
-                                      ]
-                                  );
+                                   else{
+                                     return  Column
+                                       (
+                                         children: [
+                                           Text('No new update'),
+
+                                           Icon(Icons.cloud_download, color: Colors.grey.withOpacity(0.5),),
+                                         ]
+                                     );
+                                  }
+
 
                                 } else{
                                   return CupertinoActivityIndicator();
