@@ -155,8 +155,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                     ..setEntry(3, 2, 0.001)
                                     ..rotateY(val),
                                   child: Container(
-                                    width: 309,
-                                    height: 474,
+                                    width: 310,
+                                    height: 480,
                                     child: isBack ?
                                     Container(
                                       padding: EdgeInsets.all(20.0),
@@ -205,7 +205,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                       child: Container(
                                         padding: EdgeInsets.all(20.0),
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10.0),
+                                          color: Theme.of(context).accentColor,
+                                            borderRadius: BorderRadius.circular(30.0),
                                             image: DecorationImage(
                                                 image: AssetImage('assets/face.png')
                                             )
@@ -219,7 +220,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 mainAxisAlignment:MainAxisAlignment.center,
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                  Text(vocabItems.word, style: TextStyle(fontSize: 35.0, fontFamily: 'Lobster-Regular', color: Colors.black.withOpacity(0.7)),),
+                                                  Text(vocabItems.word, style: TextStyle(fontSize: 35.0, fontFamily: 'Lobster-Regular', color: Colors.white.withOpacity(0.7)),),
                                                   TextToSpeech(vocabWord: vocabItems.word)
                                                 ],
                                               ),
@@ -231,7 +232,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                               alignment: Alignment.center,
 
                                               decoration: BoxDecoration(
-                                                  color: Colors.black.withOpacity(0.1),
+                                                  color: Colors.white.withOpacity(0.1),
                                                   borderRadius: BorderRadius.circular(10.0)
                                               ),
                                               child:CupertinoScrollbar(
@@ -239,7 +240,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
-                                                  child:  Text(vocabItems.englishMeaning, style: TextStyle(fontSize: 23.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),
+                                                  child:  Text(vocabItems.englishMeaning, style: TextStyle(fontSize: 23.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white.withOpacity(0.7)),
                                                       textAlign: TextAlign.center),
                                                 ),
 
@@ -255,14 +256,14 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                               margin: EdgeInsets.only(top: 3.0, bottom: 3.0),
 
                                               decoration: BoxDecoration(
-                                                  color: Colors.black.withOpacity(0.1),
+                                                  color: Colors.white.withOpacity(0.1),
                                                   borderRadius: BorderRadius.circular(10.0)
                                               ),
                                               child:CupertinoScrollbar(
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
-                                                  child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 22.0, color: Colors.black.withOpacity(0.7),
+                                                  child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 22.0, color: Colors.white.withOpacity(0.7),
                                                       fontFamily: 'Ekushey-Puja'),
                                                       textAlign: TextAlign.center),
                                                 ),
@@ -275,20 +276,20 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                               alignment: Alignment.center,
 
                                               decoration: BoxDecoration(
-                                                  color: Colors.black.withOpacity(0.1),
+                                                  color: Colors.white.withOpacity(0.1),
                                                   borderRadius: BorderRadius.circular(10.0)
                                               ),
                                               child:CupertinoScrollbar(
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
-                                                  child: TextToSpeechSentence(sentences: vocabItems.sentences, color: Colors.black.withOpacity(0.7)),
+                                                  child: TextToSpeechSentence(sentences: vocabItems.sentences, color: Colors.white.withOpacity(0.7)),
                                                 ),
 
                                               ),
                                             ),
 
-                                            Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt), style: TextStyle(fontSize: 12.0, fontFamily: 'ZillaSlab-Regular', color: Colors.black.withOpacity(0.7)),),
+                                            Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt), style: TextStyle(fontSize: 12.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white.withOpacity(0.7)),),
                                           ],
                                         ),
 

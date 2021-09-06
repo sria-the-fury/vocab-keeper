@@ -173,11 +173,12 @@ class _MyVocabState extends State<MyVocab> {
                 children: [
                   ElevatedButton.icon(
                     onPressed: _selectDate,
-                    icon: Icon(Icons.today),
-                    label: searchByDate ? Text(DateFormat.yMMMd().format(DateTime.parse(_date.toString()))) : Text('FIND BY DATE'),
+                    icon: Icon(Icons.today, color: searchByDate ? Colors.white : Colors.grey[600]),
+                    label: searchByDate ? Text(DateFormat.yMMMd().format(DateTime.parse(_date.toString())), style: TextStyle(color: Colors.white)) :
+                    Text('FIND BY DATE', style: TextStyle(color: searchByDate ? Colors.white : Colors.grey[600])),
                     style: ElevatedButton.styleFrom(
                         enableFeedback: true,
-                        primary: searchByDate ? Colors.blue[500] : Colors.grey,
+                        primary: searchByDate ? Theme.of(context).accentColor : Colors.white.withOpacity(0.2),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)
                         )
@@ -186,11 +187,11 @@ class _MyVocabState extends State<MyVocab> {
 
                   ElevatedButton.icon(
                     onPressed: _searchAllVocab,
-                    icon: Icon(Icons.description),
-                    label: Text('FIND ALL'),
+                    icon: Icon(Icons.description, color: findAllVocab ? Colors.white : Colors.grey[600]),
+                    label: Text('FIND ALL', style: TextStyle(color: findAllVocab ? Colors.white : Colors.grey[600])),
                     style: ElevatedButton.styleFrom(
                         enableFeedback: true,
-                        primary: findAllVocab ? Colors.blue[500] : Colors.grey,
+                        primary: findAllVocab ? Theme.of(context).accentColor : Colors.white.withOpacity(0.2),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)
                         )

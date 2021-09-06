@@ -109,7 +109,6 @@ class _NoteManipulatorState extends State<NoteManipulator> {
   @override
   Widget build(BuildContext context) {
 
-    print("_getConnection => ${_getNoConnection()}");
 
     return Container(
         height: isNotePublic ? 150 : 120,
@@ -177,6 +176,7 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                 ],
               ),
             ),
+            SizedBox(height: 5.0,),
             Divider(height: 1.0, color: Colors.grey,),
             Container(
               child: Column(
@@ -193,7 +193,7 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text( isNotePublic ? 'Private your note?' : 'Share with everyone? ',
+                            Text( isNotePublic ? 'private this note?' : 'share this note? ',
                               style: TextStyle(fontSize: 20.0, fontFamily: 'ZillaSlab-Regular'),),
                             Text( isNotePublic ? 'No one can read your note.' : 'Your photo, name and note will be public.', textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.grey.withOpacity(0.9), fontFamily: 'ZillaSlab-Regular'),),

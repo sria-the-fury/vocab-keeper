@@ -156,7 +156,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                             () {
                           _closeEdit();
                         },
-                            icon: isEditable ? Icon(Icons.close) : Icon(Icons.arrow_back)
+                            icon: isEditable ? Icon(Icons.close, color: Colors.white) : Icon(Icons.arrow_back, color: Colors.white)
                         ),
 
                         isUpdating ?
@@ -172,6 +172,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                           //label: Widgets.Text( isEditable ? 'UPDATE' : 'EDIT'),
                           style: ElevatedButton.styleFrom(
                               enableFeedback: true,
+                              primary: Theme.of(context).accentColor,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30.0)
                               )

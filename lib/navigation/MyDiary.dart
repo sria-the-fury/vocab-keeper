@@ -165,14 +165,14 @@ class _MyDiaryState extends State<MyDiary> {
           children: [
             ElevatedButton.icon(
               onPressed: _selectDate,
-              icon: Icon(Icons.today),
+              icon: Icon(Icons.today, color: searchByDate ? Colors.white : Colors.grey[600]),
               label: searchByDate
                   ? Text(
-                  DateFormat.yMMMd().format(DateTime.parse(_date.toString())))
-                  : Text('FIND BY DATE'),
+                  DateFormat.yMMMd().format(DateTime.parse(_date.toString())), style: TextStyle(color: Colors.white),)
+                  : Text('FIND BY DATE', style: TextStyle(color: searchByDate ? Colors.white : Colors.grey[600]),),
               style: ElevatedButton.styleFrom(
                   enableFeedback: true,
-                  primary: searchByDate ? Colors.blue[500] : Colors.grey,
+                  primary: searchByDate ? Theme.of(context).accentColor : Colors.white.withOpacity(0.2),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)
                   )
@@ -181,10 +181,10 @@ class _MyDiaryState extends State<MyDiary> {
 
             ElevatedButton.icon(
               onPressed: _searchAllVocab,
-              icon: Icon(Icons.description),
-              label: Text('FIND ALL'),
+              icon: Icon(Icons.description, color: findAllDiary ? Colors.white : Colors.grey[700]),
+              label: Text('FIND ALL', style: TextStyle(color: findAllDiary ? Colors.white : Colors.grey[700])),
               style: ElevatedButton.styleFrom(
-                  primary: findAllDiary ? Colors.blue[500] : Colors.grey,
+                  primary: findAllDiary ? Theme.of(context).accentColor : Colors.white.withOpacity(0.2),
                   enableFeedback: true,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)
