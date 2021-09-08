@@ -186,7 +186,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 Text(vocabItems.englishMeaning,
                                                     style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white), textAlign: TextAlign.center),
                                                 SizedBox(height: 20.0,),
-                                                Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, fontFamily: 'Ekushey-Puja', color: Colors.white),textAlign: TextAlign.center),
+                                                Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, color: Colors.white),textAlign: TextAlign.center),
                                               ],
                                             ),
                                           ),
@@ -263,8 +263,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
-                                                  child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 22.0, color: Colors.white.withOpacity(0.7),
-                                                      fontFamily: 'Ekushey-Puja'),
+                                                  child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 22.0, color: Colors.white.withOpacity(0.7),),
                                                       textAlign: TextAlign.center),
                                                 ),
 

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
 import 'package:vocab_keeper/hive/model/DiaryModel.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
@@ -249,9 +250,15 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                         setData(new ClipboardData(text: data));
                         FlutterToaster.successToaster(true, 'LINK COPIED');
                       }, icon: Icon(Icons.content_copy)),
+
+                      IconButton(onPressed: () async {
+                        var data = 'https://vocabkeeper.oasisoneiric.tech/diary/${currentUser?.uid}?noteId=${widget.diaryData.id}';
+                        HapticFeedback.vibrate();
+                        await canLaunch(data) ? await launch(data) : throw 'Could not launch $data';
+                        FlutterToaster.defaultToaster(true, 'Viewing your note in Browser');
+                      }, icon: Icon(Icons.public)),
                     ],
                   ) : Container()
-
 
                 ],
               ),

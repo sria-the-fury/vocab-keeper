@@ -39,6 +39,10 @@ class DiaryManagement{
         'isPublicDiary' : value,
 
       });
+      await FirebaseFirestore.instance.collection('users').doc(currentUser!.uid).update({
+        'isPublic' : value,
+
+      });
     }catch(e){
       FlutterToaster.errorToaster(true, 'share note - ${e.toString()}');
     }
