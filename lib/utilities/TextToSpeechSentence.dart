@@ -1,6 +1,4 @@
 
-
-
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -8,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 class TextToSpeechSentence extends StatefulWidget {
@@ -174,7 +173,8 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextButton(
-              child: Text(text, style: TextStyle(fontSize: widget.fontSize, color: color, fontFamily: widget.fontFamily,),textAlign: textAlign),
+              child:
+        Text(text, style: GoogleFonts.getFont(widget.fontFamily, textStyle: TextStyle(fontSize: widget.fontSize, color: color)), textAlign: textAlign,) ,
 
               onPressed: () => func()),
         ]);

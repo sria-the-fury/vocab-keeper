@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vocab_keeper/hive/model/DiaryModel.dart';
@@ -21,6 +23,11 @@ void main() async {
   await Hive.openBox<DiaryModel>('diary');
   FirebaseFirestore.instance.settings =
       Settings(persistenceEnabled: false, cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
   runApp(MyApp());
 }
 

@@ -9,6 +9,7 @@ import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
 import 'package:vocab_keeper/utilities/TextToSpeechSentence.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class GesturedAnimatedCard extends StatefulWidget {
@@ -172,7 +173,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 scrollDirection: Axis.vertical,
 
                                                 child: TextToSpeechSentence(characters: vocabItems.word,
-                                                    color: Colors.white.withOpacity(0.7), fontSize: 35.0, fontFamily: 'Lobster-Regular', textAlign: TextAlign.center)
+                                                    color: Colors.white.withOpacity(0.7), fontSize: 35.0, fontFamily: 'Lobster Two', textAlign: TextAlign.center)
                                               ),
 
                                             ),
@@ -189,7 +190,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                       scrollDirection: Axis.vertical,
 
                                                       child: TextToSpeechSentence(characters: vocabItems.englishMeaning,
-                                                          color: Colors.white.withOpacity(0.7), fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', textAlign: TextAlign.center),
+                                                          color: Colors.white.withOpacity(0.7), fontSize: 25.0, fontFamily: 'Zilla Slab', textAlign: TextAlign.center),
                                                     ),
 
                                                   ),
@@ -203,7 +204,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                     child: SingleChildScrollView(
                                                       scrollDirection: Axis.vertical,
 
-                                                      child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, color: Colors.white.withOpacity(0.7)),textAlign: TextAlign.center),
+                                                      child: Text(vocabItems.nativeMeaning, style:
+                                                      GoogleFonts.hindSiliguri(textStyle : TextStyle(fontSize: 22.0, color: Colors.white.withOpacity(0.7))),textAlign: TextAlign.center),
                                                     ),
 
                                                   ),
@@ -214,7 +216,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           ),
 
                                           Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt),
-                                            style: TextStyle(fontSize: 15.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white),),
+                                            style: GoogleFonts.zillaSlab( textStyle:
+                                            TextStyle(fontSize: 12.0, fontFamily: 'Zilla Slab', color: Colors.white.withOpacity(0.7)),) ),
                                         ],
                                       ),
 
@@ -243,7 +246,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                     scrollDirection: Axis.horizontal,
 
                                                     child: TextToSpeechSentence(characters: vocabItems.word,
-                                                        color: Colors.white.withOpacity(0.7), fontSize: 32.0, fontFamily: 'Lobster-Regular', textAlign: TextAlign.center)
+                                                        color: Colors.white.withOpacity(0.7), fontSize: 32.0, fontFamily: 'Lobster Two', textAlign: TextAlign.center)
                                                 ),
 
                                               ),
@@ -265,7 +268,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
 
                                                   child:
                                                   TextToSpeechSentence(characters: vocabItems.englishMeaning,
-                                                      color: Colors.white.withOpacity(0.7), fontSize: 23.0, fontFamily: 'ZillaSlab-Regular', textAlign: TextAlign.center),
+                                                      color: Colors.white.withOpacity(0.7), fontSize: 23.0, fontFamily: 'Zilla Slab', textAlign: TextAlign.center),
                                                 ),
 
                                               ),
@@ -287,8 +290,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
-                                                  child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 22.0, color: Colors.white.withOpacity(0.7),),
-                                                      textAlign: TextAlign.center),
+                                                  child: Text(vocabItems.nativeMeaning, style:
+                                                  GoogleFonts.hindSiliguri(textStyle : TextStyle(fontSize: 22.0, color: Colors.white.withOpacity(0.7))),textAlign: TextAlign.center),
                                                 ),
 
                                               ),
@@ -307,13 +310,15 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                   scrollDirection: Axis.vertical,
 
                                                   child: TextToSpeechSentence(characters: vocabItems.sentences,
-                                                    color: Colors.white.withOpacity(0.7), fontSize: 15.0, fontFamily: 'ZillaSlab-Regular', textAlign: TextAlign.left,),
+                                                    color: Colors.white.withOpacity(0.7), fontSize: 15.0, fontFamily: 'Zilla Slab', textAlign: TextAlign.left,),
                                                 ),
 
                                               ),
                                             ),
 
-                                            Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt), style: TextStyle(fontSize: 12.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white.withOpacity(0.7)),),
+                                            Text(DateFormat.yMMMd().add_jms().format(vocabItems.createdAt),
+                                                style: GoogleFonts.zillaSlab( textStyle:
+                                                TextStyle(fontSize: 12.0, fontFamily: 'Zilla Slab', color: Colors.white.withOpacity(0.7)),) ),
                                           ],
                                         ),
 

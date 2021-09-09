@@ -49,6 +49,7 @@ dependencies:
   cached_network_image: ^3.1.0
   connectivity: ^3.0.6
   share: ^2.0.4
+  google_fonts: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -84,16 +85,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Lobster-Regular
-      fonts:
-        - asset: fonts/Lobster-Regular.ttf
-          style: normal
-
-    - family: ZillaSlab-Regular
-      fonts:
-        - asset: fonts/ZillaSlab-Regular.ttf
-          style: normal
+#  fonts:
+#    - family: Lobster-Regular
+#      fonts:
+#        - asset: fonts/Lobster-Regular.ttf
+#          style: normal
+#
+#    - family: ZillaSlab-Regular
+#      fonts:
+#        - asset: fonts/ZillaSlab-Regular.ttf
+#          style: normal
 
 
   # For details regarding fonts from package dependencies,
