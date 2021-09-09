@@ -11,9 +11,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum TtsState { playing, stopped, paused, continued }
 class TextToSpeechSentence extends StatefulWidget {
-  final sentences;
+  final characters;
   final color;
-  TextToSpeechSentence ({Key? key, this.sentences, this.color}) : super(key: key);
+  final fontSize;
+  final fontFamily;
+  final textAlign;
+  TextToSpeechSentence ({Key? key, required this.characters, required this.color,
+   required this.fontSize, required this.fontFamily, this.textAlign}) : super(key: key);
 
   @override
   _TextToSpeechSentenceState createState() => _TextToSpeechSentenceState();
@@ -147,7 +151,7 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      _newVoiceText = widget.sentences;
+      _newVoiceText = widget.characters;
     });
 
     return _btnSection();
@@ -157,19 +161,20 @@ class _TextToSpeechSentenceState extends State<TextToSpeechSentence> {
   Widget _btnSection() {
     return Container(
       child: ttsState == TtsState.stopped ? _buildButtonColumn(
-          widget.sentences, widget.color, _speak) : _buildButtonColumn(
-           widget.sentences, Colors.green, _stop),
+          widget.characters, widget.color, widget.textAlign, _speak) :
+      _buildButtonColumn(
+           widget.characters, widget.color, widget.textAlign, _stop),
     );
   }
 
 
-  Column _buildButtonColumn(String text, Color color, Function func) {
+  Column _buildButtonColumn(String text, Color color, TextAlign textAlign, Function func) {
     return Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextButton(
-              child: Text(text, style: TextStyle(fontSize: 15.0, color: color, fontFamily: 'ZillaSlab-Regular',),textAlign: TextAlign.left),
+              child: Text(text, style: TextStyle(fontSize: widget.fontSize, color: color, fontFamily: widget.fontFamily,),textAlign: textAlign),
 
               onPressed: () => func()),
         ]);

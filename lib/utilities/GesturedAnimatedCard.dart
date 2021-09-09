@@ -8,7 +8,6 @@ import 'package:vocab_keeper/firebase/VocabularyManagement.dart';
 import 'package:vocab_keeper/hive/model/VocabularyModel.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
 import 'package:vocab_keeper/utilities/FlutterToaster.dart';
-import 'package:vocab_keeper/utilities/TextToSpeech.dart';
 import 'package:vocab_keeper/utilities/TextToSpeechSentence.dart';
 
 
@@ -137,11 +136,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                   },
                   child: Column(
                     children: [
-                      // widget.showAllVocab ? Text('SHOWING ALL VOCABS', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)) :
 
-                      // Text(DateFormat.yMMMd().format(DateTime.parse(widget.searchDate.toString())),
-                      //   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
-                      // SizedBox(height: 10.0,),
                       TweenAnimationBuilder(tween: Tween<double>(begin: 0, end: angle),
                           duration: Duration(seconds: 1),
                           builder: (BuildContext context, double val, __){
@@ -169,24 +164,51 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
+
                                           Container(
-                                            child: Row(
-                                              mainAxisAlignment:MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Text(vocabItems.word, style: TextStyle(fontSize: 35.0, fontFamily: 'Lobster-Regular', color: Colors.white.withOpacity(0.7)),),
-                                                TextToSpeech(vocabWord: vocabItems.word)
-                                              ],
+                                            height: 120,
+                                            child:CupertinoScrollbar(
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.vertical,
+
+                                                child: TextToSpeechSentence(characters: vocabItems.word,
+                                                    color: Colors.white.withOpacity(0.7), fontSize: 35.0, fontFamily: 'Lobster-Regular', textAlign: TextAlign.center)
+                                              ),
+
                                             ),
                                           ),
 
                                           Container(
                                             child: Column(
                                               children: [
-                                                Text(vocabItems.englishMeaning,
-                                                    style: TextStyle(fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white), textAlign: TextAlign.center),
-                                                SizedBox(height: 20.0,),
-                                                Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, color: Colors.white),textAlign: TextAlign.center),
+                                                Container(
+                                                  height: 120,
+                                                  alignment: Alignment.center,
+                                                  child:CupertinoScrollbar(
+                                                    child: SingleChildScrollView(
+                                                      scrollDirection: Axis.vertical,
+
+                                                      child: TextToSpeechSentence(characters: vocabItems.englishMeaning,
+                                                          color: Colors.white.withOpacity(0.7), fontSize: 25.0, fontFamily: 'ZillaSlab-Regular', textAlign: TextAlign.center),
+                                                    ),
+
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10.0,),
+
+                                                Container(
+                                                  height: 110,
+                                                  alignment: Alignment.center,
+                                                  child:CupertinoScrollbar(
+                                                    child: SingleChildScrollView(
+                                                      scrollDirection: Axis.vertical,
+
+                                                      child: Text(vocabItems.nativeMeaning, style: TextStyle(fontSize: 25.0, color: Colors.white.withOpacity(0.7)),textAlign: TextAlign.center),
+                                                    ),
+
+                                                  ),
+                                                ),
+
                                               ],
                                             ),
                                           ),
@@ -205,7 +227,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                       child: Container(
                                         padding: EdgeInsets.all(20.0),
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).accentColor,
+                                            color: Theme.of(context).accentColor,
                                             borderRadius: BorderRadius.circular(30.0),
                                             image: DecorationImage(
                                                 image: AssetImage('assets/face.png')
@@ -215,14 +237,15 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Container(
-                                              alignment: Alignment.center,
-                                              child: Row(
-                                                mainAxisAlignment:MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(vocabItems.word, style: TextStyle(fontSize: 35.0, fontFamily: 'Lobster-Regular', color: Colors.white.withOpacity(0.7)),),
-                                                  TextToSpeech(vocabWord: vocabItems.word)
-                                                ],
+                                              height: 55,
+                                              child:CupertinoScrollbar(
+                                                child: SingleChildScrollView(
+                                                    scrollDirection: Axis.horizontal,
+
+                                                    child: TextToSpeechSentence(characters: vocabItems.word,
+                                                        color: Colors.white.withOpacity(0.7), fontSize: 32.0, fontFamily: 'Lobster-Regular', textAlign: TextAlign.center)
+                                                ),
+
                                               ),
                                             ),
 
@@ -240,8 +263,9 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
-                                                  child:  Text(vocabItems.englishMeaning, style: TextStyle(fontSize: 23.0, fontFamily: 'ZillaSlab-Regular', color: Colors.white.withOpacity(0.7)),
-                                                      textAlign: TextAlign.center),
+                                                  child:
+                                                  TextToSpeechSentence(characters: vocabItems.englishMeaning,
+                                                      color: Colors.white.withOpacity(0.7), fontSize: 23.0, fontFamily: 'ZillaSlab-Regular', textAlign: TextAlign.center),
                                                 ),
 
                                               ),
@@ -282,7 +306,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                                 child: SingleChildScrollView(
                                                   scrollDirection: Axis.vertical,
 
-                                                  child: TextToSpeechSentence(sentences: vocabItems.sentences, color: Colors.white.withOpacity(0.7)),
+                                                  child: TextToSpeechSentence(characters: vocabItems.sentences,
+                                                    color: Colors.white.withOpacity(0.7), fontSize: 15.0, fontFamily: 'ZillaSlab-Regular', textAlign: TextAlign.left,),
                                                 ),
 
                                               ),
