@@ -96,8 +96,8 @@ class _AddVocabModalState extends State<AddVocabModal> {
 
     disableIfSame() {
       return (
-          _initialSentences.contains(_addSentences) && _initialWord.contains(_addWord) &&  _initialNativeMeaning.contains(_addNativeMeaning)
-              && _initialEnglishMeaning.contains(_addEnglishMeaning)
+          _initialSentences == _addSentences && _initialWord == _addWord.trim() &&  _initialNativeMeaning == _addNativeMeaning.trim()
+              && _initialEnglishMeaning == _addEnglishMeaning.trim()
       );
     }
 
@@ -194,16 +194,15 @@ class _AddVocabModalState extends State<AddVocabModal> {
                     child: CupertinoActivityIndicator(radius: 12.0,)
                 )
                     :
-                ElevatedButton.icon(
+                ElevatedButton(
 
                   onPressed: () async {
                     await addDataToPreference();
                   },
-                  label:  Text('ADD'),
-                  icon: Icon(Icons.add),
+                  child: Icon(Icons.add, color: Colors.white),
                   style: ElevatedButton.styleFrom(
                       enableFeedback: true,
-                      primary: Colors.blue[500],
+                      primary: Theme.of(context).accentColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0)
                       )
@@ -221,15 +220,16 @@ class _AddVocabModalState extends State<AddVocabModal> {
 
             Visibility(
                 visible: !disableIfSame(),
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.cloud),
+                child:
+                ElevatedButton(
+                  child: Icon(Icons.cloud, color: Colors.white),
                   onPressed: () async {
                     await updateVocabulary();
                   },
-                  label:  Text('UPDATE'),
+
                   style: ElevatedButton.styleFrom(
                       enableFeedback: true,
-                      primary: Colors.blue[500],
+                      primary: Theme.of(context).accentColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0)
                       )
@@ -245,7 +245,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
               ListTile(
                 title:  TextFormField(
                   initialValue: !isEditing? '' : _initialWord,
-                  onChanged: (value) => setState(() => _addWord = value),
+                  onChanged: (value) => setState(() => _addWord = value.trim()),
                   decoration: InputDecoration(
                     labelText: 'Add Word',
                     // errorText: 'Error message',
@@ -259,7 +259,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
               ListTile(
                 title:  TextFormField(
                     initialValue: !isEditing? '' : _initialEnglishMeaning,
-                    onChanged: (value) => setState(() => _addEnglishMeaning = value),
+                    onChanged: (value) => setState(() => _addEnglishMeaning = value.trim()),
                     decoration: InputDecoration(
                         labelText: 'Meaning in English',
                         // errorText: 'Error message',
@@ -273,7 +273,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
               ListTile(
                 title:  TextFormField(
                   initialValue: !isEditing? '' : _initialNativeMeaning,
-                  onChanged: (value) => setState(() => _addNativeMeaning = value),
+                  onChanged: (value) => setState(() => _addNativeMeaning = value.trim()),
                   decoration: InputDecoration(
                     labelText: 'Meaning in Native',
                     // errorText: 'Error message',
