@@ -90,7 +90,7 @@ class _DiaryCardState extends State<DiaryCard> {
                         padding: EdgeInsets.symmetric(horizontal: 5.0),
                         decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(11.0), bottomRight: Radius.circular(11.0))
+                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,5 +109,3 @@ class _DiaryCardState extends State<DiaryCard> {
     );
   }
 }
-
-// Widgets.Text(_quillController.document.toPlainText(), maxLines: 10,)
