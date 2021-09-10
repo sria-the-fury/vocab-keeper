@@ -79,7 +79,8 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                     children: [
                       isDeleting ? CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.delete, color: Colors.red),
                       SizedBox(width: 5.0,),
-                      Text( isDeleting ? 'deleting..' : 'wanna delete $word? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                      Text( isDeleting ? 'deleting..' : 'wanna delete $word? ', style:
+                      GoogleFonts.zillaSlab(textStyle: TextStyle(fontSize: 20.0, color: Colors.red), )),
                     ],
                   ),
                 ),

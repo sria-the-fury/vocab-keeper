@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:mdi/mdi.dart';
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                               Icon(Icons.spellcheck, size: 25.0,
                                 color: _selectedIndex == 0 ? Colors.white : Colors.white70,),
                               SizedBox(width: 10.0,),
-                              Text('VOCAB', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
+                              Text('VOCAB', style: GoogleFonts.zillaSlab(textStyle: TextStyle(color: Colors.white, fontSize: 16.0)))
                             ],
                           )
                       ),
@@ -201,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                               Icon(Mdi.notebook,size: 25.0,
                                 color: _selectedIndex == 2 ? Colors.white : Colors.white60 ,),
                               SizedBox(width: 10.0,),
-                              Text('DIARY', style: TextStyle(color: Colors.white, fontSize: 16.0, fontFamily: 'ZillaSlab-Regular'),)
+                              Text('DIARY', style: GoogleFonts.zillaSlab(textStyle: TextStyle(color: Colors.white, fontSize: 16.0)))
                             ],
                           )
                       ),

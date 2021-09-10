@@ -64,8 +64,8 @@ class _DiaryCardState extends State<DiaryCard> {
                   children : [
 
                     Container(
-                      padding: EdgeInsets.all(5.0),
-                      height: 165,
+                      padding: EdgeInsets.symmetric(horizontal: 5.0),
+                      height: 162,
 
                       child: SingleChildScrollView(
 
@@ -86,10 +86,11 @@ class _DiaryCardState extends State<DiaryCard> {
                     ),
 
                     Container(
-                        padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 6.0),
+                      height: 29,
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
                         decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(10.0)
+                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(11.0), bottomRight: Radius.circular(11.0))
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

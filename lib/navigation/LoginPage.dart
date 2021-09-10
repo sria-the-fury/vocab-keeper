@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
@@ -105,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            child: Center(
+          alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,11 +133,14 @@ class _LoginPageState extends State<LoginPage> {
                           )
                       ),
                     ),
+                    SizedBox(height: 10,),
+                    Text('Write your Notes,', style: GoogleFonts.zillaSlab(textStyle: TextStyle(fontSize: 20)),),
+                    Text('             Store  Vocabulary.', style: GoogleFonts.zillaSlab(textStyle: TextStyle(fontSize: 20)),),
                     SizedBox(height: 50.0,),
                     FloatingActionButton.extended(onPressed: _signInWithGoogle,
                       label: Container(child: Row(
                         children: [
-                          Text('Sign in with'),
+                          Text('SIGN IN WITH'),
                           Container(
                             height: 30,
                             width: 30,
@@ -155,7 +159,6 @@ class _LoginPageState extends State<LoginPage> {
                     )
                   ],
                 )
-            )
 
         )
     );

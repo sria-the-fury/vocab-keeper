@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vocab_keeper/firebase/UserManagement.dart';
 import 'package:vocab_keeper/hive/boxes/Boxes.dart';
@@ -152,7 +153,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       isDeleting ? CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.person, color: Colors.red),
                       SizedBox(width: 5.0,),
-                      Text( isDeleting ? 'hold on, deleting your account.' : 'wanna delete your account? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                      Text( isDeleting ? 'hold on, deleting your account.' : 'wanna delete your account? ',
+                        style: GoogleFonts.zillaSlab(fontSize: 20.0, color: Colors.red)),
                     ],
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vocab_keeper/firebase/DiaryManagement.dart';
@@ -133,9 +134,10 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(width: 5.0,),
-                        Text( isDeleting ? 'deleting..' : 'wanna delete this? ', style: TextStyle(fontSize: 20.0, color: Colors.red, fontFamily: 'ZillaSlab-Regular'),),
+                        Text( isDeleting ? 'deleting..' : 'wanna delete this? ',
+                          style: GoogleFonts.zillaSlab(color: Colors.red, fontSize: 20.0)),
                         Text('After deleting, you can\'t get it anymore', textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey.withOpacity(0.9), fontFamily: 'ZillaSlab-Regular'),)
+                          style: GoogleFonts.zillaSlab(color: Colors.grey.withOpacity(0.9)))
                       ],
                     ),
                   ),
@@ -195,9 +197,9 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text( isNotePublic ? 'private this note?' : 'share this note? ',
-                              style: TextStyle(fontSize: 20.0, fontFamily: 'ZillaSlab-Regular'),),
+                              style: GoogleFonts.zillaSlab(fontSize: 20.0)),
                             Text( isNotePublic ? 'No one can read your note.' : 'Your photo, name and note will be public.', textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.grey.withOpacity(0.9), fontFamily: 'ZillaSlab-Regular'),),
+                              style: GoogleFonts.zillaSlab(color: Colors.grey.withOpacity(0.9))),
                           ],
                         ),
 
