@@ -124,7 +124,7 @@ class _TextToSpeechSettingsState extends State<TextToSpeechSettings> {
     await flutterTts.setPitch(pitch);
 
     await flutterTts.awaitSpeakCompletion(true);
-    await flutterTts.speak('Hello, Mr. ${widget.userName}. How are you?');
+    await flutterTts.speak('Hello, ${widget.userName}. How are you?');
   }
 
   Future _stop() async {
