@@ -231,7 +231,7 @@ class _GesturedAnimatedArdState extends State<GesturedAnimatedCard> {
                                       child: Container(
                                         padding: EdgeInsets.all(20.0),
                                         decoration: BoxDecoration(
-                                            color: Theme.of(context).accentColor,
+                                            color: Colors.black,
                                             borderRadius: BorderRadius.circular(30.0),
                                             image: DecorationImage(
                                                 image: AssetImage('assets/face.png')

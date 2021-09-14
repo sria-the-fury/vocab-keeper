@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:mdi/mdi.dart';
 import 'package:vocab_keeper/navigation/MyDiary.dart';
@@ -11,7 +10,6 @@ import 'package:vocab_keeper/navigation/MyVocab.dart';
 import 'package:vocab_keeper/navigation/ProfilePage.dart';
 import 'package:vocab_keeper/utilities/AddNoteModal.dart';
 import 'package:vocab_keeper/utilities/AddVocabModal.dart';
-import 'package:lottie/lottie.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -89,7 +87,7 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: Visibility(
           child: FloatingActionButton(
             backgroundColor: Theme.of(context).primaryColor,
-            child: _selectedIndex == 0 ? Lottie.asset('assets/lottie/add-vocab.json') : Lottie.asset('assets/lottie/write-note.json'),
+            child: _selectedIndex == 0 ? Icon(Icons.add, color: Colors.white,) : Icon(Icons.border_color, color: Colors.white),
             onPressed: (){
 
               Navigator.of(context).push(new MaterialPageRoute<Null>(

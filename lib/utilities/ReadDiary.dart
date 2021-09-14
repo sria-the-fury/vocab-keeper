@@ -156,7 +156,7 @@ class _ReadDiaryState extends State<ReadDiary> {
                             () {
                           _closeEdit();
                         },
-                            icon: isEditable ? Icon(Icons.close, color: Colors.white) : Icon(Icons.arrow_back, color: Colors.white)
+                            icon: isEditable ? Icon(Icons.close) : Icon(Icons.arrow_back)
                         ),
 
                         isUpdating ?
@@ -169,7 +169,6 @@ class _ReadDiaryState extends State<ReadDiary> {
                           } :
                           (newDeltaText.toString() == deltaText.toString()) || newDeltaText.length == 17 ? null : _updateDiary,
                           child: isEditable ? Icon(Icons.cloud) : Icon(Icons.edit),
-                          //label: Widgets.Text( isEditable ? 'UPDATE' : 'EDIT'),
                           style: ElevatedButton.styleFrom(
                               enableFeedback: true,
                               primary: Theme.of(context).accentColor,
@@ -181,11 +180,7 @@ class _ReadDiaryState extends State<ReadDiary> {
 
                         Container(
                           padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(10.0)
-                          ),
-                          child: Widgets.Text(DateFormat('EEEE, MMM dd y', 'en_US').add_jms().format(widget.diaryData.createdAt),
+                          child: Widgets.Text(DateFormat('EEEE, dd MMM y', 'en_US').add_jms().format(widget.diaryData.createdAt),
                             style: TextStyle(fontSize: 11.0),),
                         )
 

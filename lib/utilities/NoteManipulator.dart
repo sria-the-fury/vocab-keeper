@@ -85,11 +85,9 @@ class _NoteManipulatorState extends State<NoteManipulator> {
     }
   }
   void deleteNote(DiaryModel diary) {
-    // final box = Boxes.getTransactions();
-    // box.delete(transaction.key);
 
     diary.delete();
-    //setState(() => transactions.remove(transaction));
+
   }
 
   void updateDiaryPublic(DiaryModel diary, bool isPublicDiary) {
@@ -231,9 +229,6 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                           }
 
                         }),
-                        // isDeleting ? CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.public, size: 15.0,),
-
-
 
                       ],
                     ),
@@ -245,11 +240,13 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                       IconButton(onPressed: (){
                         Share.share('https://vocabkeeper.oasisoneiric.tech/diary/${currentUser?.uid}?noteId=${widget.diaryData.id}',
                             subject: 'Note Shared by ${currentUser!.displayName}');
+                        Navigator.of(context).pop();
                       }, icon: Icon(Icons.share)),
                       IconButton(onPressed: (){
                         var data = 'https://vocabkeeper.oasisoneiric.tech/diary/${currentUser?.uid}?noteId=${widget.diaryData.id}';
                         HapticFeedback.vibrate();
                         setData(new ClipboardData(text: data));
+                        Navigator.of(context).pop();
                         FlutterToaster.successToaster(true, 'LINK COPIED');
                       }, icon: Icon(Icons.content_copy)),
 
@@ -257,8 +254,9 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                         var data = 'https://vocabkeeper.oasisoneiric.tech/diary/${currentUser?.uid}?noteId=${widget.diaryData.id}';
                         HapticFeedback.vibrate();
                         await canLaunch(data) ? await launch(data) : throw 'Could not launch $data';
-                        FlutterToaster.defaultToaster(true, 'Viewing your note in Browser');
-                      }, icon: Icon(Icons.public)),
+                        Navigator.of(context).pop();
+                        FlutterToaster.defaultToaster(true, 'Launching this note in Browser');
+                      }, icon: Icon(Icons.launch)),
                     ],
                   ) : Container()
 
