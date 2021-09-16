@@ -108,25 +108,25 @@ class _ReadDiaryState extends State<ReadDiary> {
   }
 
   Future<bool?> _showWaring( BuildContext context) async => showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Widgets.Text('Discard'),
-          content: Widgets.Text('Are you sure to discard editing?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Widgets.Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-                _closeEdit();
-              },
-              child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
-            ),
-          ],
-        )
-      );
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Widgets.Text('Discard'),
+        content: Widgets.Text('Are you sure to discard editing?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Widgets.Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+              _closeEdit();
+            },
+            child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
+          ),
+        ],
+      )
+  );
 
 
   @override
@@ -151,42 +151,6 @@ class _ReadDiaryState extends State<ReadDiary> {
                         child:  Row(
                           mainAxisAlignment: Widgets.MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton(onPressed:
-                            isEditable == false || newDeltaText.length == 17 ?
-                                () {
-                              Navigator.of(context).pop();
-                            }
-                                : (newDeltaText.toString() != deltaText.toString()) ?
-
-
-                                () {
-                              showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: Widgets.Text('Discard'),
-                                  content: Widgets.Text('Are you sure to discard editing?'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context, 'Cancel'),
-                                      child: Widgets.Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'OK');
-                                        _closeEdit();
-                                      },
-                                      child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } :
-
-                                () {
-                              _closeEdit();
-                            },
-                                icon: isEditable ? Icon(Icons.close) : Icon(Icons.arrow_back)
-                            ),
 
                             isUpdating ?
                             CupertinoActivityIndicator(radius: 12.0,)
