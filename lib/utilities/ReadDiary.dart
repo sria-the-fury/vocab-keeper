@@ -107,118 +107,149 @@ class _ReadDiaryState extends State<ReadDiary> {
 
   }
 
+  Future<bool?> _showWaring( BuildContext context) async => showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Widgets.Text('Discard'),
+          content: Widgets.Text('Are you sure to discard editing?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Widgets.Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+                _closeEdit();
+              },
+              child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
+            ),
+          ],
+        )
+      );
+
 
   @override
   Widget build(BuildContext context) {
 
-    return
-      Scaffold(body: SafeArea (
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              children: [
-                Container(
+    return WillPopScope(
+      onWillPop: () async{
+        if((newDeltaText.toString() != deltaText.toString())){
+          final show = await _showWaring(context);
+          return show ?? false;
+        } else return true;
 
-                    child:  Row(
-                      mainAxisAlignment: Widgets.MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(onPressed:
-                        isEditable == false || newDeltaText.length == 17 ?
-                            () {
-                          Navigator.of(context).pop();
-                        }
-                            : (newDeltaText.toString() != deltaText.toString()) ?
+      },
+      child:  Scaffold(
+          body: SafeArea (
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Column(
+                  children: [
+                    Container(
+
+                        child:  Row(
+                          mainAxisAlignment: Widgets.MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(onPressed:
+                            isEditable == false || newDeltaText.length == 17 ?
+                                () {
+                              Navigator.of(context).pop();
+                            }
+                                : (newDeltaText.toString() != deltaText.toString()) ?
 
 
-                            () {
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: Widgets.Text('Discard'),
-                              content: Widgets.Text('Are you sure to discard editing?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                                  child: Widgets.Text('Cancel'),
+                                () {
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: Widgets.Text('Discard'),
+                                  content: Widgets.Text('Are you sure to discard editing?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                                      child: Widgets.Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, 'OK');
+                                        _closeEdit();
+                                      },
+                                      child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
+                                    ),
+                                  ],
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context, 'OK');
-                                    _closeEdit();
-                                  },
-                                  child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
-                                ),
-                              ],
+                              );
+                            } :
+
+                                () {
+                              _closeEdit();
+                            },
+                                icon: isEditable ? Icon(Icons.close) : Icon(Icons.arrow_back)
                             ),
-                          );
-                        } :
 
-                            () {
-                          _closeEdit();
-                        },
-                            icon: isEditable ? Icon(Icons.close) : Icon(Icons.arrow_back)
-                        ),
+                            isUpdating ?
+                            CupertinoActivityIndicator(radius: 12.0,)
+                                :
+                            ElevatedButton(
+                              onPressed: isEditable == false ? () {
+                                HapticFeedback.vibrate();
+                                _editDiary();
+                              } :
+                              (newDeltaText.toString() == deltaText.toString()) || newDeltaText.length == 17 ? null : _updateDiary,
+                              child: isEditable ? Icon(Icons.cloud) : Icon(Icons.edit),
+                              style: ElevatedButton.styleFrom(
+                                  enableFeedback: true,
+                                  primary: Theme.of(context).accentColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0)
+                                  )
+                              ),
+                            ),
 
-                        isUpdating ?
-                        CupertinoActivityIndicator(radius: 12.0,)
-                            :
-                        ElevatedButton(
-                          onPressed: isEditable == false ? () {
-                            HapticFeedback.vibrate();
-                            _editDiary();
-                          } :
-                          (newDeltaText.toString() == deltaText.toString()) || newDeltaText.length == 17 ? null : _updateDiary,
-                          child: isEditable ? Icon(Icons.cloud) : Icon(Icons.edit),
-                          style: ElevatedButton.styleFrom(
-                              enableFeedback: true,
-                              primary: Theme.of(context).accentColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0)
-                              )
-                          ),
-                        ),
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
+                              child: Widgets.Text(DateFormat('EEEE, dd MMM y', 'en_US').add_jms().format(widget.diaryData.createdAt),
+                                style: TextStyle(fontSize: 11.0),),
+                            )
 
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
-                          child: Widgets.Text(DateFormat('EEEE, dd MMM y', 'en_US').add_jms().format(widget.diaryData.createdAt),
-                            style: TextStyle(fontSize: 11.0),),
+                          ],
                         )
-
-                      ],
-                    )
-                ),
-
-                Visibility(
-                  visible: isEditable,
-                  child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: QuillToolbar.basic(controller: _quillController!, showHistory: false,)
-
-                  ),
-                ),
-
-
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Widgets.Axis.vertical,
-                    child: QuillEditor(
-                      controller: _quillController!,
-                      autoFocus: true,
-                      focusNode: _focusNode,
-                      readOnly: !isEditable,
-                      scrollable: true,
-                      expands: false,
-                      showCursor: isEditable,
-                      scrollController: ScrollController(),
-                      padding: EdgeInsets.all(5),
                     ),
-                  ),
-                )
 
-              ],
-            ),
+                    Visibility(
+                      visible: isEditable,
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: QuillToolbar.basic(controller: _quillController!, showHistory: false,)
+
+                      ),
+                    ),
+
+
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Widgets.Axis.vertical,
+                        child: QuillEditor(
+                          controller: _quillController!,
+                          autoFocus: true,
+                          focusNode: _focusNode,
+                          readOnly: !isEditable,
+                          scrollable: true,
+                          expands: false,
+                          showCursor: isEditable,
+                          scrollController: ScrollController(),
+                          padding: EdgeInsets.all(5),
+                        ),
+                      ),
+                    )
+
+                  ],
+                ),
+              )
           )
-      )
-      );
+      ),
+    );
+
   }
 }
