@@ -93,7 +93,7 @@ class _ReadDiaryState extends State<ReadDiary> {
       editNote(widget.diaryData, newDeltaText);
       DiaryManagement().updateDiary(widget.diaryData.id, newDeltaText);
     }catch(e){
-      FlutterToaster.successToaster(true, 'updateDiary ${e.toString()}');
+      FlutterToaster.errorToaster(true, 'updateDiary ${e.toString()}');
 
     } finally{
       setState(() {
