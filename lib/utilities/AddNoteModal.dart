@@ -79,11 +79,40 @@ class _AddNoteModalState extends State<AddNoteModal> {
     }
   }
 
+
+  Future<bool?> _showWaring( BuildContext context) async => showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Widgets.Text('Discard'),
+        content: Widgets.Text('Are you sure to discard saving?'),
+        actions: <Widget>[
+
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+            child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Widgets.Text('CANCEL'),
+          ),
+        ],
+      )
+  );
+
   @override
   Widget build(BuildContext context) {
 
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async{
+        if(diaryText.length > 1 ){
+          final show = await _showWaring(context);
+          return show ?? false;
+        } else return true;
+      },
+    child: Scaffold(
       body: SafeArea(
           child: Container(
               padding: EdgeInsets.all(10.0),
@@ -130,8 +159,9 @@ class _AddNoteModalState extends State<AddNoteModal> {
           Navigator.of(context).pop();
         },
         child: diaryText.length > 1 && !isAddingNote ? Icon(Icons.save, color: Colors.white,) : isAddingNote ?
-         CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.chevron_left, color: Colors.white),
+        CupertinoActivityIndicator(radius: 12.0,) : Icon(Icons.chevron_left, color: Colors.white),
       ),
+    ),
     );
   }
 }

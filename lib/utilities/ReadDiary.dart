@@ -93,6 +93,9 @@ class _ReadDiaryState extends State<ReadDiary> {
       editNote(widget.diaryData, newDeltaText);
       DiaryManagement().updateDiary(widget.diaryData.id, newDeltaText);
     }catch(e){
+      setState(() {
+        isUpdating = false;
+      });
       FlutterToaster.errorToaster(true, 'updateDiary ${e.toString()}');
 
     } finally{
@@ -114,15 +117,24 @@ class _ReadDiaryState extends State<ReadDiary> {
         content: Widgets.Text('Are you sure to discard editing?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Widgets.Text('Cancel'),
+            onPressed: isUpdating ? null : (){
+              _updateDiary();
+              Navigator.pop(context, true);
+            },
+
+            child: Widgets.Text('UPDATE', style: TextStyle(color: Colors.green[500]),),
           ),
+
           TextButton(
-            onPressed: () {
+            onPressed: isUpdating ? null : () {
               Navigator.pop(context, true);
               _closeEdit();
             },
             child: Widgets.Text('OK', style: TextStyle(color: Colors.red[500]),),
+          ),
+          TextButton(
+            onPressed: isUpdating ? null : () => Navigator.pop(context, false),
+            child: Widgets.Text('CANCEL'),
           ),
         ],
       )
