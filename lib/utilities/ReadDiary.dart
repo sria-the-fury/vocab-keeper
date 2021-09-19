@@ -114,7 +114,7 @@ class _ReadDiaryState extends State<ReadDiary> {
       context: context,
       builder: (context) => AlertDialog(
         title: Widgets.Text('Discard'),
-        content: Widgets.Text('Are you sure to discard editing?'),
+        content: Widgets.Text('Are you sure to discard editing note?'),
         actions: <Widget>[
           TextButton(
             onPressed: isUpdating ? null : (){

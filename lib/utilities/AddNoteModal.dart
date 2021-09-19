@@ -67,7 +67,10 @@ class _AddNoteModalState extends State<AddNoteModal> {
       await DiaryManagement().addDiary(noteId, jsonEncode(_quillController.document.toDelta().toJson()));
 
     } catch(e){
-      FlutterToaster.successToaster(true, 'addNote ${e.toString()}');
+      FlutterToaster.errorToaster(true, 'addNote ${e.toString()}');
+      setState(() {
+        isAddingNote = false;
+      });
 
     }
     finally{
@@ -84,7 +87,7 @@ class _AddNoteModalState extends State<AddNoteModal> {
       context: context,
       builder: (context) => AlertDialog(
         title: Widgets.Text('Discard'),
-        content: Widgets.Text('Are you sure to discard saving?'),
+        content: Widgets.Text('Are you sure to discard saving note?'),
         actions: <Widget>[
 
           TextButton(
@@ -134,7 +137,7 @@ class _AddNoteModalState extends State<AddNoteModal> {
                           scrollable: true,
                           expands: false,
                           showCursor: true,
-                          placeholder: "Write your Diary",
+                          placeholder: "Write your Note",
                           scrollController: ScrollController(),
                           padding: EdgeInsets.all(5),
 

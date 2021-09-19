@@ -135,6 +135,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     prefs.clear();
                   } catch(e){
                     FlutterToaster.errorToaster(true, 'deleteAccount - ${e.toString()}');
+                    setState(() {
+                      isDeleting = false;
+                    });
                   } finally{
                     setState(() {
                       isDeleting = false;

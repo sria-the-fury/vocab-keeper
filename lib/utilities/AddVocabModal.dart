@@ -124,13 +124,16 @@ class _AddVocabModalState extends State<AddVocabModal> {
       }
       catch (e) {
         FlutterToaster.errorToaster(true, 'addVocab - ${e.toString()}');
+        setState(() {
+          isAdding = false;
+        });
       }
       finally {
         Navigator.of(context).pop();
         setState(() {
           isAdding = false;
         });
-        FlutterToaster.warningToaster(true, 'Vocab added');
+        FlutterToaster.successToaster(true, 'Vocab added');
       }
     }
 
@@ -161,6 +164,9 @@ class _AddVocabModalState extends State<AddVocabModal> {
       }
       catch (e) {
 
+        setState(() {
+          isUpdating = false;
+        });
         FlutterToaster.errorToaster(true, 'updateVocab - ${e.toString()}');
       }
       finally {
@@ -168,7 +174,7 @@ class _AddVocabModalState extends State<AddVocabModal> {
         setState(() {
           isUpdating = false;
         });
-        FlutterToaster.warningToaster(true, 'Vocab updated');
+        FlutterToaster.successToaster(true, 'Vocab updated');
       }
 
     }
