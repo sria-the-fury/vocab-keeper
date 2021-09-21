@@ -105,6 +105,51 @@ class _NoteManipulatorState extends State<NoteManipulator> {
       },
     );
   }
+  
+  Future<void> _showDeleteDialog() async{
+
+    return showDialog(context: context,
+        builder: (BuildContext context) =>
+            AlertDialog(
+              title: Text('Delete Note', style: TextStyle(color: Colors.red[500]),),
+              content: Text('Are you sure to delete this note?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: isDeleting ? null : () async{
+                    try{
+                      setState(() {
+                        isDeleting = true;
+                      });
+                      deleteNote(widget.diaryData);
+                      await DiaryManagement().deleteDiary(widget.diaryData.id);
+                    } catch (e){
+                      FlutterToaster.errorToaster(true, 'deleteNote - ${e.toString()}');
+                      setState(() {
+                        isDeleting = false;
+                      });
+
+                    } finally{
+                      setState(() {
+                        isDeleting = false;
+                      });
+                      Navigator.of(context).pop();
+                      FlutterToaster.warningToaster(true, 'Note Deleted');
+
+                    }
+                  },
+                  child: Text('DELETE', style: TextStyle(color: Colors.red[500])),
+                ),
+                TextButton(
+                  onPressed: (){
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('CANCEL', style: TextStyle(color: Colors.blue[500])),
+                )
+              ],
+            )
+    );
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,35 +184,14 @@ class _NoteManipulatorState extends State<NoteManipulator> {
                       ],
                     ),
                   ),
-                  isDeleting ? Container(
-                    padding: EdgeInsets.all(12.0),
-                    child: CupertinoActivityIndicator(radius: 12.0,),
-                  ) :
+
                   IconButton(
                       onPressed: isDeleting ? null : _getNoConnection()
                           ? () {
                         FlutterToaster.warningToaster(true, 'NO INTERNET CONNECTION!!!');
                       } : () async{
-                        try{
-                          setState(() {
-                            isDeleting = true;
-                          });
-                          deleteNote(widget.diaryData);
-                          await DiaryManagement().deleteDiary(widget.diaryData.id);
-                        } catch (e){
-                          FlutterToaster.errorToaster(true, 'deleteNote - ${e.toString()}');
-                          setState(() {
-                            isDeleting = false;
-                          });
-
-                        } finally{
-                          setState(() {
-                            isDeleting = false;
-                          });
-                          Navigator.of(context).pop();
-                          FlutterToaster.warningToaster(true, 'Note Deleted');
-
-                        }
+                        await _showDeleteDialog();
+                        Navigator.of(context).pop();
 
                       },
                       icon: Icon(Icons.delete, color: Colors.red, size: 20.0,)
